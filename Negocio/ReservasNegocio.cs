@@ -1,0 +1,200 @@
+﻿using System;
+using System.Collections.Generic;
+using Dominio;
+using ConexionBD;
+
+namespace Negocio
+{
+    public class ReservasNegocio
+    {      
+        public List<Reserva> ObtenerTodasLasReservas()
+        {
+            var reservas = new List<Reserva>();
+            var datos = new AccesoDatos();
+
+            try
+            {
+                string sql = @"
+SELECT
+    r.ReservaID,                 -- 0
+    r.UsuarioID,                 -- 1
+    r.CanchaID,                  -- 2
+    r.Fecha,                     -- 3 (DATE)
+    r.HoraInicio,                -- 4 (TIME)
+    r.HoraFin,                   -- 5 (TIME)
+    r.PromocionID,               -- 6 (nullable)
+    u.Nombre      AS UsuarioNombre,   -- 7
+    u.Apellido    AS UsuarioApellido, -- 8
+    c.Nombre      AS CanchaNombre,    -- 9
+    e.Nombre      AS EstadoCancha,    -- 10
+    p.Descripcion AS PromoDescripcion,-- 11 (nullable)
+    p.Descuento   AS PromoDescuento   -- 12 (nullable, TINYINT)
+FROM Reservas r
+JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
+JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
+JOIN Estados  e  ON e.EstadoID  = c.EstadoID
+LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
+ORDER BY r.Fecha, r.HoraInicio;";
+
+                datos.setearConsulta(sql);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    var reserva = new Reserva
+                    {
+                        IdReserva = datos.Lector.GetInt32(0),
+                        Usuario = new Usuario
+                        {
+                            UsuarioID = datos.Lector.GetInt32(1),
+                            Nombre = datos.Lector.GetString(7),
+                            Apellido = datos.Lector.GetString(8)
+                        },
+                        Cancha = new Cancha
+                        {
+                            CanchaID = datos.Lector.GetInt32(2),
+                            Nombre = datos.Lector.GetString(9),
+                            EstadoID = 0 
+                        },
+                        FechaReserva = datos.Lector.GetDateTime(3),
+                        HoraInicio = datos.Lector.GetTimeSpan(4),
+                        HoraFin = datos.Lector.GetTimeSpan(5),
+                        Promocion = datos.Lector.IsDBNull(6) ? null : new Promocion
+                        {
+                            PromocionID = datos.Lector.GetInt32(6),
+                            Descripcion = datos.Lector.IsDBNull(11) ? null : datos.Lector.GetString(11),
+                            Descuento = datos.Lector.IsDBNull(12) ? (byte)0 : datos.Lector.GetByte(12)
+                        }
+                    };
+
+                    reservas.Add(reserva);
+                }
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return reservas;
+        }
+
+        public Reserva BuscarReservaPorID(int idReserva)
+        {
+            Reserva reserva = null;
+            var datos = new AccesoDatos();
+
+            try
+            {
+                string sql = @"
+SELECT
+    r.ReservaID,
+    r.UsuarioID,
+    r.CanchaID,
+    r.Fecha,
+    r.HoraInicio,
+    r.HoraFin,
+    r.PromocionID,
+    u.Nombre      AS UsuarioNombre,
+    u.Apellido    AS UsuarioApellido,
+    c.Nombre      AS CanchaNombre,
+    e.Nombre      AS EstadoCancha,
+    p.Descripcion AS PromoDescripcion,
+    p.Descuento   AS PromoDescuento
+FROM Reservas r
+JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
+JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
+JOIN Estados  e  ON e.EstadoID  = c.EstadoID
+LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
+WHERE r.ReservaID = @id;";
+
+                datos.setearConsulta(sql);
+                datos.setearParametro("@id", idReserva);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    reserva = new Reserva
+                    {
+                        IdReserva = datos.Lector.GetInt32(0),
+                        Usuario = new Usuario
+                        {
+                            UsuarioID = datos.Lector.GetInt32(1),
+                            Nombre = datos.Lector.GetString(7),
+                            Apellido = datos.Lector.GetString(8)
+                        },
+                        Cancha = new Cancha
+                        {
+                            CanchaID = datos.Lector.GetInt32(2),
+                            Nombre = datos.Lector.GetString(9),
+                            EstadoID = 0
+                        },
+                        FechaReserva = datos.Lector.GetDateTime(3),
+                        HoraInicio = datos.Lector.GetTimeSpan(4),
+                        HoraFin = datos.Lector.GetTimeSpan(5),
+                        Promocion = datos.Lector.IsDBNull(6) ? null : new Promocion
+                        {
+                            PromocionID = datos.Lector.GetInt32(6),
+                            Descripcion = datos.Lector.IsDBNull(11) ? null : datos.Lector.GetString(11),
+                            Descuento = datos.Lector.IsDBNull(12) ? (byte)0 : datos.Lector.GetByte(12)
+                        }
+                    };
+                }
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return reserva;
+        }
+
+        public int AgregarReserva(Reserva reserva)
+        {
+            var datos = new AccesoDatos();
+            try
+            {
+
+                string sql = @"
+EXEC SP_ReservasOK
+    @UsuarioID   = @usuarioId,
+    @CanchaID    = @canchaId,
+    @Fecha       = @fecha,
+    @HoraInicio  = @horaInicio,
+    @HoraFin     = @horaFin,
+    @PromocionID = @promoId;
+";             
+
+                datos.setearConsulta(sql);
+                datos.setearParametro("@usuarioId", reserva.Usuario.UsuarioID);
+                datos.setearParametro("@canchaId", reserva.Cancha.CanchaID);
+                datos.setearParametro("@fecha", reserva.FechaReserva.Date);
+                datos.setearParametro("@horaInicio", reserva.HoraInicio);
+                datos.setearParametro("@horaFin", reserva.HoraFin);
+                datos.setearParametro("@promoId", (object)reserva.Promocion?.PromocionID ?? DBNull.Value);
+
+                object result = datos.ejecutarScalar();           
+                return result == null || result == DBNull.Value ? -1 : Convert.ToInt32(result);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void EliminarReserva(int idReserva)
+        {
+            var datos = new AccesoDatos();
+            try
+            {
+                string sql = "DELETE FROM Reservas WHERE ReservaID = @id;";
+                datos.setearConsulta(sql);
+                datos.setearParametro("@id", idReserva);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+    }
+}

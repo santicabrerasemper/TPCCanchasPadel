@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConexionBD
+namespace Dominio
 {
-    public class Class1
+    public class Localidad
     {
+        public int IdLocalidad { get; set; }
+        public string Nombre { get; set; }
     }
 }
