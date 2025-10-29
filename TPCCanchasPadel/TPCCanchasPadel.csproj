@@ -181,6 +181,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
+    <Content Include="TestReservas.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -256,6 +257,13 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="TestReservas.aspx.cs">
+      <DependentUpon>TestReservas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TestReservas.aspx.designer.cs">
+      <DependentUpon>TestReservas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -279,6 +287,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\TPCanchasPadel\TPCCanchasPadel\ConexionBD\ConexionBD.csproj">
+      <Project>{65ed8402-faab-4779-bfe5-49861fe76226}</Project>
+      <Name>ConexionBD</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\TPCanchasPadel\TPCCanchasPadel\Dominio\Dominio.csproj">
       <Project>{76ba0d97-f609-495d-9eff-b5692f51534a}</Project>
       <Name>Dominio</Name>
