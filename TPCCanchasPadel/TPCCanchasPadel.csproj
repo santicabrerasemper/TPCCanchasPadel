@@ -286,20 +286,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\TPCanchasPadel\TPCCanchasPadel\ConexionBD\ConexionBD.csproj">
-      <Project>{65ed8402-faab-4779-bfe5-49861fe76226}</Project>
-      <Name>ConexionBD</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\TPCanchasPadel\TPCCanchasPadel\Dominio\Dominio.csproj">
-      <Project>{76ba0d97-f609-495d-9eff-b5692f51534a}</Project>
-      <Name>Dominio</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\TPCanchasPadel\TPCCanchasPadel\Negocio\Negocio.csproj">
-      <Project>{0f5a6740-b893-4611-b4a0-051bcec8bb89}</Project>
-      <Name>Negocio</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
