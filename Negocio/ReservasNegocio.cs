@@ -196,5 +196,55 @@ EXEC SP_ReservasOK
                 datos.cerrarConexion();
             }
         }
+        public List<Cancha> ListarCanchasDisponibles(DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
+        {
+            List<Cancha> canchas = new List<Cancha>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+            SELECT c.CanchaID, c.Nombre, c.SucursalID, c.EstadoID
+            FROM Canchas c
+            WHERE c.CanchaID NOT IN (
+                SELECT r.CanchaID
+                FROM Reservas r
+                WHERE r.Fecha = @Fecha
+                AND r.HoraInicio < @HoraFin
+                AND r.HoraFin > @HoraInicio
+            )
+            ORDER BY c.SucursalID, c.Nombre;";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@Fecha", fecha);
+                datos.setearParametro("@HoraInicio", horaInicio);
+                datos.setearParametro("@HoraFin", horaFin);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Cancha cancha = new Cancha
+                    {
+                        CanchaID = (int)datos.Lector["CanchaID"],
+                        Nombre = (string)datos.Lector["Nombre"],
+                        SucursalID = (int)datos.Lector["SucursalID"],
+                        EstadoID = (int)datos.Lector["EstadoID"]
+                    };
+                    canchas.Add(cancha);
+                }
+
+                return canchas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar canchas disponibles: " + ex.Message);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

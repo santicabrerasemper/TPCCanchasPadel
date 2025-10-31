@@ -5,11 +5,11 @@ VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPCCanchasPadel", "TPCCanchasPadel\TPCCanchasPadel.csproj", "{57F8B490-8DE9-41D0-A00E-DD5AF4A9CE2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConexionBD", "ConexionBD\ConexionBD.csproj", "{5AE5ABE1-686A-4B78-ACA3-B4E0240D47E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConexionBD", "ConexionBD\ConexionBD.csproj", "{426D7A26-C87B-4BC4-BD2E-8D7B497F3392}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocio", "Negocio\Negocio.csproj", "{2705B7F1-D699-4066-AED9-F636C19AB664}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocio", "Negocio\Negocio.csproj", "{815D71AE-760C-4353-99FB-C4C908273356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominio", "Dominio\Dominio.csproj", "{0414E9B2-DF27-4E15-9691-791DED90E00C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominio", "Dominio\Dominio.csproj", "{52C738A9-5CC4-411C-936A-E7DAE102D1CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +21,18 @@ Global
 		{57F8B490-8DE9-41D0-A00E-DD5AF4A9CE2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57F8B490-8DE9-41D0-A00E-DD5AF4A9CE2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57F8B490-8DE9-41D0-A00E-DD5AF4A9CE2D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5AE5ABE1-686A-4B78-ACA3-B4E0240D47E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5AE5ABE1-686A-4B78-ACA3-B4E0240D47E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5AE5ABE1-686A-4B78-ACA3-B4E0240D47E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5AE5ABE1-686A-4B78-ACA3-B4E0240D47E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2705B7F1-D699-4066-AED9-F636C19AB664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2705B7F1-D699-4066-AED9-F636C19AB664}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2705B7F1-D699-4066-AED9-F636C19AB664}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2705B7F1-D699-4066-AED9-F636C19AB664}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0414E9B2-DF27-4E15-9691-791DED90E00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0414E9B2-DF27-4E15-9691-791DED90E00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0414E9B2-DF27-4E15-9691-791DED90E00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0414E9B2-DF27-4E15-9691-791DED90E00C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{426D7A26-C87B-4BC4-BD2E-8D7B497F3392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426D7A26-C87B-4BC4-BD2E-8D7B497F3392}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426D7A26-C87B-4BC4-BD2E-8D7B497F3392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426D7A26-C87B-4BC4-BD2E-8D7B497F3392}.Release|Any CPU.Build.0 = Release|Any CPU
+		{815D71AE-760C-4353-99FB-C4C908273356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{815D71AE-760C-4353-99FB-C4C908273356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{815D71AE-760C-4353-99FB-C4C908273356}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{815D71AE-760C-4353-99FB-C4C908273356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C738A9-5CC4-411C-936A-E7DAE102D1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C738A9-5CC4-411C-936A-E7DAE102D1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C738A9-5CC4-411C-936A-E7DAE102D1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C738A9-5CC4-411C-936A-E7DAE102D1CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
