@@ -1,5 +1,4 @@
-﻿
-<%@ Page Title="Canchas Disponibles" Language="C#" MasterPageFile="~/Canchas.Master" AutoEventWireup="true" CodeBehind="ClienteCanchas.aspx.cs" Inherits="TPCCanchasPadel.ClienteCanchas" %>
+﻿<%@ Page Title="Canchas Disponibles" Language="C#" MasterPageFile="~/Canchas.Master" AutoEventWireup="true" CodeBehind="ClienteCanchas.aspx.cs" Inherits="TPCCanchasPadel.ClienteCanchas" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -10,6 +9,13 @@
 
         <div class="row g-3 justify-content-center mb-4">
             <div class="col-md-3">
+    <label for="ddlSucursal" class="form-label">Sucursal</label>
+    <asp:DropDownList ID="ddlSucursal" runat="server" CssClass="form-select"></asp:DropDownList>
+</div>
+
+
+            <div class="col-md-3">
+
                 <label for="txtFecha" class="form-label">Fecha</label>
                 <asp:TextBox ID="txtFecha" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
             </div>
@@ -26,15 +32,28 @@
             </div>
         </div>
 
-        <asp:Label ID="lblMensaje" runat="server" CssClass="text-center text-danger fw-semibold d-block mb-3"></asp:Label>
+        <!-- Mensaje -->
+        <asp:Label ID="lblMensaje" runat="server" CssClass="text-center fw-semibold d-block mb-3"></asp:Label>
 
+        <!-- Tabla de canchas -->
         <asp:GridView ID="gvCanchas" runat="server" CssClass="table table-striped table-hover text-center"
-            AutoGenerateColumns="false" Visible="false">
+            AutoGenerateColumns="false" OnRowCommand="gvCanchas_RowCommand" Visible="false">
             <Columns>
                 <asp:BoundField DataField="CanchaID" HeaderText="ID" />
                 <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
                 <asp:BoundField DataField="SucursalID" HeaderText="Sucursal" />
-                <asp:BoundField DataField="EstadoID" HeaderText="Estado" />
+               <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
+               <asp:BoundField DataField="PrecioHora" HeaderText="Total estimado" DataFormatString="${0:N2}" />
+
+               <%-- 🔽 Nueva columna con botón Reservar --%>
+                <asp:TemplateField HeaderText="Acción">
+                    <ItemTemplate>
+                        <asp:Button ID="btnReservar" runat="server" Text="Reservar"
+                            CommandName="Reservar"
+                            CommandArgument='<%# Eval("CanchaID") %>'
+                            CssClass="btn btn-success btn-sm" />
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Columns>
         </asp:GridView>
     </div>

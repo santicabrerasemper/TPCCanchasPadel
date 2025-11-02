@@ -204,16 +204,22 @@ EXEC SP_ReservasOK
             try
             {
                 string consulta = @"
-            SELECT c.CanchaID, c.Nombre, c.SucursalID, c.EstadoID
-            FROM Canchas c
-            WHERE c.CanchaID NOT IN (
-                SELECT r.CanchaID
-                FROM Reservas r
-                WHERE r.Fecha = @Fecha
-                AND r.HoraInicio < @HoraFin
-                AND r.HoraFin > @HoraInicio
-            )
-            ORDER BY c.SucursalID, c.Nombre;";
+    SELECT 
+        c.CanchaID, 
+        c.Nombre, 
+        c.SucursalID, 
+        s.Nombre AS NombreSucursal, 
+        c.EstadoID
+    FROM Canchas c
+    INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+    WHERE c.CanchaID NOT IN (
+        SELECT r.CanchaID
+        FROM Reservas r
+        WHERE r.Fecha = @Fecha
+        AND r.HoraInicio < @HoraFin
+        AND r.HoraFin > @HoraInicio
+    )
+    ORDER BY s.Nombre, c.Nombre;";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@Fecha", fecha);
@@ -226,11 +232,19 @@ EXEC SP_ReservasOK
                 {
                     Cancha cancha = new Cancha
                     {
-                        CanchaID = (int)datos.Lector["CanchaID"],
-                        Nombre = (string)datos.Lector["Nombre"],
-                        SucursalID = (int)datos.Lector["SucursalID"],
-                        EstadoID = (int)datos.Lector["EstadoID"]
+                        CanchaID = Convert.ToInt32(datos.Lector["CanchaID"]),
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        SucursalID = Convert.ToInt32(datos.Lector["SucursalID"]),
+                        EstadoID = Convert.ToInt32(datos.Lector["EstadoID"]),
+                        NombreSucursal = datos.Lector["NombreSucursal"].ToString()
                     };
+
+                    cancha.PrecioHora = 6000;
+
+                    // 🕒 Calcular total según duración
+                    double duracionHoras = (horaFin - horaInicio).TotalHours;
+                    cancha.PrecioHora *= (decimal)duracionHoras;
+
                     canchas.Add(cancha);
                 }
 
@@ -247,4 +261,5 @@ EXEC SP_ReservasOK
         }
 
     }
+
 }

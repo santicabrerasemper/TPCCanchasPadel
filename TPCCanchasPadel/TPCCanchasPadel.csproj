@@ -288,6 +288,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConexionBD\ConexionBD.csproj">
+      <Project>{426d7a26-c87b-4bc4-bd2e-8d7b497f3392}</Project>
+      <Name>ConexionBD</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dominio\Dominio.csproj">
       <Project>{52c738a9-5cc4-411c-936a-e7dae102d1cf}</Project>
       <Name>Dominio</Name>

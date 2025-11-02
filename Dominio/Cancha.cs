@@ -13,5 +13,8 @@ namespace Dominio
         public int EstadoID { get; set; }          
         public string Nombre { get; set; }
 
+        public decimal PrecioHora { get; set; }
+        public string NombreSucursal { get; set; }
+
     }
 }
