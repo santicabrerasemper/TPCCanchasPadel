@@ -196,5 +196,70 @@ EXEC SP_ReservasOK
                 datos.cerrarConexion();
             }
         }
+        public List<Cancha> ListarCanchasDisponibles(DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
+        {
+            List<Cancha> canchas = new List<Cancha>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+    SELECT 
+        c.CanchaID, 
+        c.Nombre, 
+        c.SucursalID, 
+        s.Nombre AS NombreSucursal, 
+        c.EstadoID
+    FROM Canchas c
+    INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+    WHERE c.CanchaID NOT IN (
+        SELECT r.CanchaID
+        FROM Reservas r
+        WHERE r.Fecha = @Fecha
+        AND r.HoraInicio < @HoraFin
+        AND r.HoraFin > @HoraInicio
+    )
+    ORDER BY s.Nombre, c.Nombre;";
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@Fecha", fecha);
+                datos.setearParametro("@HoraInicio", horaInicio);
+                datos.setearParametro("@HoraFin", horaFin);
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Cancha cancha = new Cancha
+                    {
+                        CanchaID = Convert.ToInt32(datos.Lector["CanchaID"]),
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        SucursalID = Convert.ToInt32(datos.Lector["SucursalID"]),
+                        EstadoID = Convert.ToInt32(datos.Lector["EstadoID"]),
+                        NombreSucursal = datos.Lector["NombreSucursal"].ToString()
+                    };
+
+                    cancha.PrecioHora = 6000;
+
+                    // 🕒 Calcular total según duración
+                    double duracionHoras = (horaFin - horaInicio).TotalHours;
+                    cancha.PrecioHora *= (decimal)duracionHoras;
+
+                    canchas.Add(cancha);
+                }
+
+                return canchas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar canchas disponibles: " + ex.Message);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
+
 }
