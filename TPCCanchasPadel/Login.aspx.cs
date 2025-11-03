@@ -33,7 +33,7 @@ namespace TPCCanchasPadel
             Session["Usuario"] = user.NombreUsuario; 
             Session["RolID"] = user.RolID;
 
-            Response.Redirect("Home.aspx", false);
+            Response.Redirect("ClienteCanchas.aspx", false);
         }
     }
 }
