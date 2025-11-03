@@ -44,7 +44,7 @@
             <div class="mb-3">
                 <label for="txtMensaje" class="form-label">Mensaje *</label>
                 <asp:TextBox ID="txtMensaje" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"
-                    Placeholder="Ej. Estoy interesado en reservar una cancha para fútbol 5 los sábados por la tarde." />
+                    Placeholder="Ej. Estoy interesado en reservar una cancha de padel por mi cumpleaños." />
             </div>
 
             <asp:Button ID="btnEnviar" runat="server" Text="Enviar" CssClass="btn btn-dark" />
