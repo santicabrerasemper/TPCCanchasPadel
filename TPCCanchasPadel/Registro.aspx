@@ -81,61 +81,61 @@
 <script>
     (() => {
         'use strict';
-        const form = document.getElementById('form1');
+        const formulario = document.getElementById('form1');
 
-        const user = document.getElementById('<%= txtUsuario.ClientID %>');
-        const nameEl = document.getElementById('<%= txtNombre.ClientID %>');
-        const lastEl = document.getElementById('<%= txtApellido.ClientID %>');
-        const pass = document.getElementById('<%= txtPassword.ClientID %>');
-        const confirm = document.getElementById('<%= txtConfirm.ClientID %>');
-        const cfb = document.getElementById('confirmFeedback');
+        const usuario = document.getElementById('<%= txtUsuario.ClientID %>');
+    const nombreEl = document.getElementById('<%= txtNombre.ClientID %>');
+    const apellidoEl = document.getElementById('<%= txtApellido.ClientID %>');
+  const contrasena = document.getElementById('<%= txtPassword.ClientID %>');
+  const confirmar  = document.getElementById('<%= txtConfirm.ClientID %>');
+        const fbConfirmacion = document.getElementById('confirmFeedback');
 
-        function trimField(el) {
+        function recortarCampo(el) {
             if (!el) return;
-            const v = el.value;
-            const t = v.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, ' ');
-            if (t !== v) el.value = t;
+            const valor = el.value;
+            const recortado = valor.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, ' ');
+            if (recortado !== valor) el.value = recortado;
         }
 
-        if (user) {
-            user.addEventListener('input', () => {
-                user.value = user.value.replace(/\s+/g, '');
+        if (usuario) {
+            usuario.addEventListener('input', () => {
+                usuario.value = usuario.value.replace(/\s+/g, '');
             });
-            user.addEventListener('blur', () => trimField(user));
+            usuario.addEventListener('blur', () => recortarCampo(usuario));
         }
 
-        [nameEl, lastEl].forEach(el => el && el.addEventListener('blur', () => trimField(el)));
+        [nombreEl, apellidoEl].forEach(el => el && el.addEventListener('blur', () => recortarCampo(el)));
 
-        function updateConfirmState() {
-            if (!pass.value || !pass.checkValidity()) {
-                confirm.setCustomValidity('');
-                cfb.classList.add('d-none');
-                if (form.classList.contains('was-validated')) {
-                    confirm.classList.remove('is-valid', 'is-invalid');
+        function actualizarEstadoConfirmacion() {
+            if (!contrasena.value || !contrasena.checkValidity()) {
+                confirmar.setCustomValidity('');
+                fbConfirmacion.classList.add('d-none');
+                if (formulario.classList.contains('was-validated')) {
+                    confirmar.classList.remove('is-valid', 'is-invalid');
                 }
                 return;
             }
 
-            if (!confirm.value) {       
-                confirm.setCustomValidity('no-match');
-                cfb.classList.add('d-none');
-                if (form.classList.contains('was-validated')) {
-                    confirm.classList.remove('is-valid', 'is-invalid');
+            if (!confirmar.value) {
+                confirmar.setCustomValidity('no-match');
+                fbConfirmacion.classList.add('d-none');
+                if (formulario.classList.contains('was-validated')) {
+                    confirmar.classList.remove('is-valid', 'is-invalid');
                 }
                 return;
             }
 
-            const ok = (confirm.value === pass.value);
-            confirm.setCustomValidity(ok ? '' : 'no-match');
-            cfb.classList.toggle('d-none', ok);
+            const ok = (confirmar.value === contrasena.value);
+            confirmar.setCustomValidity(ok ? '' : 'no-match');
+            fbConfirmacion.classList.toggle('d-none', ok);
 
-            if (form.classList.contains('was-validated')) {
-                confirm.classList.toggle('is-valid', ok);
-                confirm.classList.toggle('is-invalid', !ok);
+            if (formulario.classList.contains('was-validated')) {
+                confirmar.classList.toggle('is-valid', ok);
+                confirmar.classList.toggle('is-invalid', !ok);
             }
         }
 
-        function blockSpaces(el) {
+        function bloquearEspacios(el) {
             if (!el) return;
 
             el.addEventListener('keydown', (e) => {
@@ -143,39 +143,38 @@
             });
 
             el.addEventListener('input', () => {
-                const cleaned = el.value.replace(/\s+/g, '');
-                if (el.value !== cleaned) {
-                    el.value = cleaned;
-                    updateConfirmState();
+                const limpio = el.value.replace(/\s+/g, '');
+                if (el.value !== limpio) {
+                    el.value = limpio;
+                    actualizarEstadoConfirmacion();
                 }
             });
 
             el.addEventListener('paste', (e) => {
                 e.preventDefault();
-                const text = (e.clipboardData || window.clipboardData).getData('text') || '';
-                el.value += text.replace(/\s+/g, '');
-                updateConfirmState();
+                const texto = (e.clipboardData || window.clipboardData).getData('text') || '';
+                el.value += texto.replace(/\s+/g, '');
+                actualizarEstadoConfirmacion();
             });
         }
 
-        blockSpaces(pass);
-        blockSpaces(confirm);
+        bloquearEspacios(contrasena);
+        bloquearEspacios(confirmar);
 
-        pass.addEventListener('input', updateConfirmState);
-        confirm.addEventListener('input', updateConfirmState);
+        contrasena.addEventListener('input', actualizarEstadoConfirmacion);
+        confirmar.addEventListener('input', actualizarEstadoConfirmacion);
 
-        form.addEventListener('submit', (e) => {
-            [user, nameEl, lastEl].forEach(trimField);
+        formulario.addEventListener('submit', (e) => {
+            [usuario, nombreEl, apellidoEl].forEach(recortarCampo);
 
-            updateConfirmState();
-            if (!form.checkValidity()) {
+            actualizarEstadoConfirmacion();
+            if (!formulario.checkValidity()) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            form.classList.add('was-validated');
+            formulario.classList.add('was-validated');
         });
     })();
 </script>
-
 </body>
 </html>

@@ -44,44 +44,44 @@
 <script>
     (() => {
         'use strict';
-        const form = document.getElementById('form1');
-        const user = document.getElementById('<%= txtUsuario.ClientID %>');
-  const pass = document.getElementById('<%= txtPassword.ClientID %>');
+        const formulario = document.getElementById('form1');
+        const usuario = document.getElementById('<%= txtUsuario.ClientID %>');
+  const contrasena = document.getElementById('<%= txtPassword.ClientID %>');
 
-        function trimField(el) {
+        function recortarCampo(el) {
             if (!el) return;
-            const v = el.value;
-            const t = v.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, ' ');
-            if (t !== v) el.value = t;
+            const valor = el.value;
+            const recortado = valor.replace(/^\s+|\s+$/g, '').replace(/\s{2,}/g, ' ');
+            if (recortado !== valor) el.value = recortado;
         }
 
-        if (user) {
-            user.addEventListener('input', () => {
-                user.value = user.value.replace(/\s+/g, '');
+        if (usuario) {
+            usuario.addEventListener('input', () => {
+                usuario.value = usuario.value.replace(/\s+/g, '');
             });
-            user.addEventListener('blur', () => trimField(user));
+            usuario.addEventListener('blur', () => recortarCampo(usuario));
         }
 
-        function blockSpaces(el) {
+        function bloquearEspacios(el) {
             if (!el) return;
             el.addEventListener('keydown', (e) => { if (e.key === ' ') e.preventDefault(); });
             el.addEventListener('input', () => { el.value = el.value.replace(/\s+/g, ''); });
             el.addEventListener('paste', (e) => {
                 e.preventDefault();
-                const text = (e.clipboardData || window.clipboardData).getData('text') || '';
-                el.value += text.replace(/\s+/g, '');
+                const texto = (e.clipboardData || window.clipboardData).getData('text') || '';
+                el.value += texto.replace(/\s+/g, '');
             });
         }
-        blockSpaces(pass);
+        bloquearEspacios(contrasena);
 
-        form.addEventListener('submit', (e) => {
-            [user].forEach(trimField);
+        formulario.addEventListener('submit', (e) => {
+            [usuario].forEach(recortarCampo);
 
-            if (!form.checkValidity()) {
+            if (!formulario.checkValidity()) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            form.classList.add('was-validated');
+            formulario.classList.add('was-validated');
         });
     })();
 </script>
