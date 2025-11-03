@@ -54,7 +54,6 @@ namespace TPCCanchasPadel
         {
             try
             {
-                // Validar que todos los campos estén completos
                 if (string.IsNullOrEmpty(txtFecha.Text) ||
                     string.IsNullOrEmpty(txtHoraInicio.Text) ||
                     string.IsNullOrEmpty(txtHoraFin.Text))
@@ -64,12 +63,10 @@ namespace TPCCanchasPadel
                     return;
                 }
 
-                // Convertir los valores del formulario
                 DateTime fecha = DateTime.Parse(txtFecha.Text);
                 TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
                 TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
 
-                // Validar lógica horaria
                 if (horaInicio >= horaFin)
                 {
                     lblMensaje.Text = "La hora de inicio debe ser menor que la hora de fin.";
@@ -77,14 +74,12 @@ namespace TPCCanchasPadel
                     return;
                 }
 
-                // Llamar a la capa de negocio
                 ReservasNegocio negocio = new ReservasNegocio();
                 List<Cancha> disponibles = negocio.ListarCanchasDisponibles(fecha, horaInicio, horaFin);
                 int sucursalId = int.Parse(ddlSucursal.SelectedValue);
                 if (sucursalId != 0)
                     disponibles = disponibles.Where(c => c.SucursalID == sucursalId).ToList();
 
-                // Mostrar resultados
                 if (disponibles.Count == 0)
                 {
                     lblMensaje.Text = "No hay canchas disponibles en ese horario.";
@@ -111,25 +106,20 @@ namespace TPCCanchasPadel
             {
                 try
                 {
-                    // Obtener el ID de la cancha seleccionada
                     int canchaId = Convert.ToInt32(e.CommandArgument);
 
-                    // Validar que haya ingresado fecha y horas antes
                     if (string.IsNullOrEmpty(txtFecha.Text) || string.IsNullOrEmpty(txtHoraInicio.Text) || string.IsNullOrEmpty(txtHoraFin.Text))
                     {
                         MostrarMensaje("⚠️ Por favor, seleccioná una fecha y horario antes de reservar.", "warning");
                         return;
                     }
 
-                    // Convertir los valores
                     DateTime fecha = DateTime.Parse(txtFecha.Text);
                     TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
                     TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
 
-                    // Simular usuario logueado (por ahora fijo)
                     int usuarioId = 1;
 
-                    // Crear objeto reserva
                     Reserva nueva = new Reserva
                     {
                         Usuario = new Usuario { UsuarioID = usuarioId },
@@ -140,7 +130,6 @@ namespace TPCCanchasPadel
                         Promocion = null
                     };
 
-                    // Guardar en BD
                     ReservasNegocio negocio = new ReservasNegocio();
                     int nuevaId = negocio.AgregarReserva(nueva);
 
@@ -155,7 +144,7 @@ namespace TPCCanchasPadel
     💵 Total: ${CalcularPrecio(horaInicio, horaFin)}
 </div>", "success");
 
-                        gvCanchas.Visible = false; // opcional: ocultar tabla luego de reservar
+                        gvCanchas.Visible = false; 
                     }
                     else
                     {
@@ -170,7 +159,7 @@ namespace TPCCanchasPadel
         }
         private decimal CalcularPrecio(TimeSpan horaInicio, TimeSpan horaFin)
         {
-            decimal precioHora = 6000m; // m indica que es decimal
+            decimal precioHora = 6000m; 
             double duracion = (horaFin - horaInicio).TotalHours;
             return precioHora * (decimal)duracion;
         }

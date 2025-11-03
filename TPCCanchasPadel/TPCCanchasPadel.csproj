@@ -119,11 +119,8 @@
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
-<<<<<<< HEAD
     <Content Include="Registro.aspx" />
-=======
     <Content Include="Canchas.Master" />
->>>>>>> 8f9534fb427de37030f0a9085c01d5845352edf6
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />

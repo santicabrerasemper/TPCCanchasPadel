@@ -32,10 +32,8 @@
             </div>
         </div>
 
-        <!-- Mensaje -->
         <asp:Label ID="lblMensaje" runat="server" CssClass="text-center fw-semibold d-block mb-3"></asp:Label>
 
-        <!-- Tabla de canchas -->
         <asp:GridView ID="gvCanchas" runat="server" CssClass="table table-striped table-hover text-center"
             AutoGenerateColumns="false" OnRowCommand="gvCanchas_RowCommand" Visible="false">
             <Columns>
@@ -45,7 +43,6 @@
                <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
                <asp:BoundField DataField="PrecioHora" HeaderText="Total estimado" DataFormatString="${0:N2}" />
 
-               <%-- 🔽 Nueva columna con botón Reservar --%>
                 <asp:TemplateField HeaderText="Acción">
                     <ItemTemplate>
                         <asp:Button ID="btnReservar" runat="server" Text="Reservar"
