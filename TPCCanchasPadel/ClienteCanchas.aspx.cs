@@ -74,12 +74,9 @@ namespace TPCCanchasPadel
                     return;
                 }
 
-                ReservasNegocio negocio = new ReservasNegocio();
-                List<Cancha> disponibles = negocio.ListarCanchasDisponibles(fecha, horaInicio, horaFin);
+                ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
                 int sucursalId = int.Parse(ddlSucursal.SelectedValue);
-                if (sucursalId != 0)
-                    disponibles = disponibles.Where(c => c.SucursalID == sucursalId).ToList();
-
+                List<Cancha> disponibles = negocio.ListarCanchasDisponibles(fecha, horaInicio, horaFin, sucursalId);
                 if (disponibles.Count == 0)
                 {
                     lblMensaje.Text = "No hay canchas disponibles en ese horario.";
@@ -130,18 +127,18 @@ namespace TPCCanchasPadel
                         Promocion = null
                     };
 
-                    ReservasNegocio negocio = new ReservasNegocio();
-                    int nuevaId = negocio.AgregarReserva(nueva);
+                    ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
+                    int nuevaId = negocio.ReservarCancha(usuarioId, canchaId, fecha, horaInicio, horaFin);
 
                     if (nuevaId > 0)
                     {
                         MostrarMensaje($@"
 <div class='alert alert-success border border-success shadow-sm p-3 rounded text-center' 
      style='max-width:500px; margin:20px auto; font-size:1.1em;'>
-    ✅ <strong>¡Reserva confirmada!</strong><br/>
-    📅 Fecha: {fecha:dd/MM/yyyy}<br/>
-    🕒 Horario: {horaInicio.ToString(@"hh\:mm")} - {horaFin.ToString(@"hh\:mm")}<br/>
-    💵 Total: ${CalcularPrecio(horaInicio, horaFin)}
+     <strong>¡Reserva confirmada!</strong><br/>
+     Fecha: {fecha:dd/MM/yyyy}<br/>
+     Horario: {horaInicio.ToString(@"hh\:mm")} - {horaFin.ToString(@"hh\:mm")}<br/>
+     Total: ${negocio.CalcularPrecio(horaInicio, horaFin)}
 </div>", "success");
 
                         gvCanchas.Visible = false; 
