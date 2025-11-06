@@ -97,7 +97,35 @@ namespace TPCCanchasPadel
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("NuevaCancha.aspx?SucursalID=" + ddlSucursal.SelectedValue);
+            if (ddlSucursal.SelectedValue == "0")
+                return;
+
+            int sucursalId = Convert.ToInt32(ddlSucursal.SelectedValue);
+            AgregarCancha(sucursalId);
+            CargarCanchas(sucursalId); 
+        }
+
+        private void AgregarCancha(int sucursalId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand countCmd = new SqlCommand("SELECT COUNT(*) FROM Canchas WHERE SucursalID = @SucursalID", con);
+                countCmd.Parameters.AddWithValue("@SucursalID", sucursalId);
+
+                con.Open();
+                int cantidadActual = (int)countCmd.ExecuteScalar();
+                con.Close();
+
+                string nuevoNombre = "Cancha" + (cantidadActual + 1);
+
+                SqlCommand insertCmd = new SqlCommand("INSERT INTO Canchas (Nombre, SucursalID) VALUES (@Nombre, @SucursalID)", con);
+                insertCmd.Parameters.AddWithValue("@Nombre", nuevoNombre);
+                insertCmd.Parameters.AddWithValue("@SucursalID", sucursalId);
+
+                con.Open();
+                insertCmd.ExecuteNonQuery();
+                con.Close();
+            }
         }
     }
 }
