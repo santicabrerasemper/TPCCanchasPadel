@@ -28,7 +28,8 @@
                 <asp:TextBox ID="txtHoraFin" runat="server" CssClass="form-control" TextMode="Time"></asp:TextBox>
             </div>
             <div class="col-md-3 d-flex align-items-end">
-                <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click" />
+                <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click"/>
+                <asp:Button ID="btnEditar" runat="server" Text="Editar" CssClass="btn btn-info me-2" PostBackUrl="Editar.aspx" Visible="false"/>
             </div>
         </div>
 
