@@ -15,6 +15,7 @@ namespace Dominio
 
         public decimal PrecioHora { get; set; }
         public string NombreSucursal { get; set; }
+        public decimal TotalEstimado { get; set; }
 
     }
 }

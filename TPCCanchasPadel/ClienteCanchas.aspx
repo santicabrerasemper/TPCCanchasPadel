@@ -42,7 +42,7 @@
                 <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
                 <asp:BoundField DataField="SucursalID" HeaderText="Sucursal" />
                <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
-               <asp:BoundField DataField="PrecioHora" HeaderText="Total estimado" DataFormatString="${0:N2}" />
+               <asp:BoundField DataField="TotalEstimado" HeaderText="Total estimado" DataFormatString="{0:C}" />
 
                 <asp:TemplateField HeaderText="Acción">
                     <ItemTemplate>
