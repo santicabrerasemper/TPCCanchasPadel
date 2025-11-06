@@ -8,15 +8,29 @@
     <h2 class="text-center mb-4 fw-bold">Editar Canchas por Sucursal</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="col-md-4">
-            <label for="ddlSucursal" class="form-label fw-bold">Seleccionar Sucursal</label>
-            <asp:DropDownList ID="ddlSucursal" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlSucursal_SelectedIndexChanged"></asp:DropDownList>
+        <div class="d-flex gap-3">
+            <div class="col-md-6">
+                <label for="ddlSucursal" class="form-label fw-bold">Seleccionar Sucursal</label>
+                <asp:DropDownList ID="ddlSucursal" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlSucursal_SelectedIndexChanged"></asp:DropDownList>
+            </div>
+    
+            <div class="col-md-6">
+                <label for="ddlEstado" class="form-label fw-bold">Estado</label>
+                <asp:DropDownList ID="ddlEstado" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEstado_SelectedIndexChanged">
+                    <asp:ListItem Text="Todos" Value="0"></asp:ListItem>
+                    <asp:ListItem Text="Activos" Value="1"></asp:ListItem>
+                    <asp:ListItem Text="Inactivos" Value="2"></asp:ListItem>
+                </asp:DropDownList>
+            </div>
         </div>
-
+    
         <a href="NuevaSucursal.aspx" class="btn btn-success">Agregar Nueva Sucursal</a>
     </div>
 
-    <asp:GridView ID="gvCanchas" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="False">
+    <asp:GridView ID="gvCanchas" runat="server" 
+        CssClass="table table-bordered table-hover text-center"
+        AutoGenerateColumns="False"
+        DataKeyNames="CanchaID">
         <Columns>
             <asp:TemplateField HeaderText="">
                 <ItemTemplate>
@@ -24,17 +38,24 @@
                     <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("CanchaID") %>' />
                 </ItemTemplate>
             </asp:TemplateField>
-
-            <asp:BoundField DataField="CanchaID" HeaderText="ID" />
+    
             <asp:BoundField DataField="Nombre" HeaderText="Cancha" />
+    
+            <asp:TemplateField HeaderText="Estado">
+                <ItemTemplate>
+                    <%# Convert.ToInt32(Eval("EstadoID")) == 1 ? "Activo" : "Desactivado" %>
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
     </asp:GridView>
 
+
     <div class="text-center mt-4">
-        <asp:Button ID="btnDelete" runat="server" Text="Eliminar Canchas" CssClass="btn btn-danger me-2" OnClick="btnDelete_Click" />
+        <asp:Button ID="btnCambiarEstado" runat="server" Text="Cambiar Estado" CssClass="btn btn-warning me-2" OnClick="btnCambiarEstado_Click" />
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar Cancha" CssClass="btn btn-success me-2" OnClick="btnAgregar_Click" />
         <a href="ClienteCanchas.aspx" class="btn btn-secondary">Volver</a>
     </div>
+
 </div>
 
 </asp:Content>
