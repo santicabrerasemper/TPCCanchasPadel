@@ -11,7 +11,7 @@ namespace Negocio
 {
     public class ClienteCanchaNegocio
     {
-        
+
         public List<Cancha> ListarCanchasDisponibles(DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin, int sucursalId)
         {
             List<Cancha> canchas = new List<Cancha>();
@@ -20,18 +20,26 @@ namespace Negocio
             try
             {
                 string consulta = @"
-                SELECT c.CanchaID, c.Nombre, c.SucursalID, c.EstadoID, s.Nombre AS NombreSucursal
-                FROM Canchas c
-                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-                WHERE (@SucursalID = 0 OR c.SucursalID = @SucursalID)
-                AND c.CanchaID NOT IN (
-                    SELECT r.CanchaID
-                    FROM Reservas r
-                    WHERE r.Fecha = @Fecha
-                    AND r.HoraInicio < @HoraFin
-                    AND r.HoraFin > @HoraInicio
-                )
-                ORDER BY s.Nombre, c.Nombre;";
+            SELECT 
+                c.CanchaID,
+                c.Nombre,
+                c.SucursalID,
+                c.EstadoID,
+                s.Nombre AS NombreSucursal,
+                l.Nombre AS NombreLocalidad
+            FROM Canchas c
+            INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+            INNER JOIN Localidades l ON s.LocalidadID = l.LocalidadID
+            WHERE c.SucursalID = @SucursalID
+              AND c.CanchaID NOT IN (
+                  SELECT r.CanchaID 
+                  FROM Reservas r
+                  WHERE r.Fecha = @Fecha
+                    AND (
+                        (@HoraInicio < r.HoraFin AND @HoraFin > r.HoraInicio)
+                    )
+              )
+            ORDER BY c.Nombre";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@Fecha", fecha);
@@ -40,21 +48,39 @@ namespace Negocio
                 datos.setearParametro("@SucursalID", sucursalId);
                 datos.ejecutarLectura();
 
+                // Determinar el EstadoID correspondiente a "Activo" (para mapear a bool)
+                int activoId = 1; // fallback
+                try
+                {
+                    // intentamos obtenerlo desde la BD (una vez)
+                    AccesoDatos d2 = new AccesoDatos();
+                    d2.setearConsulta("SELECT EstadoID FROM Estados WHERE Nombre = 'Activo'");
+                    d2.ejecutarLectura();
+                    if (d2.Lector.Read())
+                        activoId = Convert.ToInt32(d2.Lector["EstadoID"]);
+                    d2.cerrarConexion();
+                }
+                catch { /* si falla dejamos activoId = 1 */ }
+
                 while (datos.Lector.Read())
                 {
                     var cancha = new Cancha
                     {
-                        CanchaID = (int)datos.Lector["CanchaID"],
-                        Nombre = (string)datos.Lector["Nombre"],
-                        SucursalID = (int)datos.Lector["SucursalID"],
-                        EstadoID = (int)datos.Lector["EstadoID"],
-                        NombreSucursal = (string)datos.Lector["NombreSucursal"]
+                        CanchaID = datos.Lector["CanchaID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["CanchaID"]) : 0,
+                        Nombre = datos.Lector["Nombre"] != DBNull.Value ? datos.Lector["Nombre"].ToString() : string.Empty,
+                        SucursalID = datos.Lector["SucursalID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["SucursalID"]) : 0,
+                        EstadoID = datos.Lector["EstadoID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["EstadoID"]) : 0,
+                        NombreSucursal = datos.Lector["NombreSucursal"] != DBNull.Value ? datos.Lector["NombreSucursal"].ToString() : string.Empty,
+                        NombreLocalidad = datos.Lector["NombreLocalidad"] != DBNull.Value ? datos.Lector["NombreLocalidad"].ToString() : string.Empty,
                     };
 
+                    // Mapeo lógico: Activa si EstadoID == activoId
+                    cancha.Activa = (cancha.EstadoID == activoId);
+
+                    // Calcular precio estimado (podes usar tu regla)
                     decimal precioHora = 6000m;
                     double duracion = (horaFin - horaInicio).TotalHours;
                     cancha.TotalEstimado = precioHora * (decimal)duracion;
-
 
                     canchas.Add(cancha);
                 }
@@ -71,7 +97,8 @@ namespace Negocio
             }
         }
 
-        
+
+
         public int ReservarCancha(int usuarioId, int canchaId, DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
         {
             AccesoDatos datos = new AccesoDatos();

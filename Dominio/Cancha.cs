@@ -12,10 +12,11 @@ namespace Dominio
         public int SucursalID { get; set; }        
         public int EstadoID { get; set; }          
         public string Nombre { get; set; }
-
+        public bool Activa { get; set; }
         public decimal PrecioHora { get; set; }
         public string NombreSucursal { get; set; }
         public decimal TotalEstimado { get; set; }
+        public string NombreLocalidad { get; set; }
 
     }
 }

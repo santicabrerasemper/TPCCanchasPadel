@@ -24,7 +24,9 @@
             </div>
         </div>
     
-        <a href="NuevaSucursal.aspx" class="btn btn-success">Agregar Nueva Sucursal</a>
+        <asp:Button ID="btnNuevaSucursal" runat="server" Text="Agregar Nueva Sucursal" CssClass="btn btn-success" OnClientClick="agregarSucursal(); return false;" />
+
+
     </div>
 
     <asp:GridView ID="gvCanchas" runat="server" 
@@ -55,6 +57,27 @@
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar Cancha" CssClass="btn btn-success me-2" OnClick="btnAgregar_Click" />
         <a href="ClienteCanchas.aspx" class="btn btn-secondary">Volver</a>
     </div>
+    
+    <script type="text/javascript">
+        function agregarSucursal() {
+            var nombre = prompt("Ingrese el nombre de la nueva sucursal:");
+            if (nombre == null || nombre.trim() === "") {
+                alert("Debe ingresar un nombre válido.");
+                return;
+            }
+
+            var localidad = prompt("Ingrese la localidad de la nueva sucursal:");
+            if (localidad == null || localidad.trim() === "") {
+                alert("Debe ingresar una localidad válida.");
+                return;
+            }
+
+            // Llamamos al servidor para crear la sucursal
+            __doPostBack('AgregarSucursal', nombre + '|' + localidad);
+        }
+    </script>
+    
+    <asp:HiddenField ID="hiddenSucursalNombre" runat="server" />
 
 </div>
 

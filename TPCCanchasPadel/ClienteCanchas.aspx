@@ -38,21 +38,25 @@
         <asp:GridView ID="gvCanchas" runat="server" CssClass="table table-striped table-hover text-center"
             AutoGenerateColumns="false" OnRowCommand="gvCanchas_RowCommand" Visible="false">
             <Columns>
-                <asp:BoundField DataField="CanchaID" HeaderText="ID" />
                 <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
-                <asp:BoundField DataField="SucursalID" HeaderText="Sucursal" />
-               <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
-               <asp:BoundField DataField="TotalEstimado" HeaderText="Total estimado" DataFormatString="{0:C}" />
-
+            
+                <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
+            
+                <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
+            
+                <asp:BoundField DataField="TotalEstimado" HeaderText="Total Estimado" DataFormatString="{0:C}" />
+            
                 <asp:TemplateField HeaderText="Acción">
                     <ItemTemplate>
                         <asp:Button ID="btnReservar" runat="server" Text="Reservar"
                             CommandName="Reservar"
                             CommandArgument='<%# Eval("CanchaID") %>'
-                            CssClass="btn btn-success btn-sm" />
+                            CssClass="btn btn-success btn-sm"
+                            Visible='<%# Convert.ToBoolean(Eval("Activa")) %>' />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
+
         </asp:GridView>
     </div>
 </asp:Content>

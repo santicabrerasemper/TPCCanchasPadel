@@ -48,9 +48,6 @@ namespace TPCCanchasPadel
             }
         }
 
-
-
-
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -85,6 +82,7 @@ namespace TPCCanchasPadel
                 }
                 else
                 {
+                    disponibles = disponibles.Where(c => c.Activa).ToList();
                     gvCanchas.DataSource = disponibles;
                     gvCanchas.DataBind();
                     gvCanchas.Visible = true;

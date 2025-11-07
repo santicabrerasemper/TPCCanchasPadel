@@ -24,6 +24,18 @@ namespace TPCCanchasPadel
             {
                 CargarSucursales();
             }
+
+            string eventTarget = Request["__EVENTTARGET"];
+            string eventArgument = Request["__EVENTARGUMENT"];
+
+            if (eventTarget == "AgregarSucursal" && !string.IsNullOrEmpty(eventArgument))
+            {
+                string[] datos = eventArgument.Split('|');
+                string nombreSucursal = datos[0];
+                string localidadNombre = datos[1];
+
+                AgregarSucursal(nombreSucursal, localidadNombre);
+            }
         }
 
         private void CargarSucursales()
@@ -141,6 +153,67 @@ namespace TPCCanchasPadel
 
             CargarCanchas();
         }
+
+        private void AgregarSucursal(string nombreSucursal, string localidadNombre)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                // 1️⃣ Crear nueva localidad
+                SqlCommand cmdLoc = new SqlCommand(
+                    "INSERT INTO Localidades (Nombre) VALUES (@Nombre); SELECT SCOPE_IDENTITY();", con);
+                cmdLoc.Parameters.AddWithValue("@Nombre", localidadNombre);
+                int nuevoLocalidadId = Convert.ToInt32(cmdLoc.ExecuteScalar());
+
+                // 2️⃣ Crear nueva sucursal con la localidad recién creada
+                SqlCommand cmdSuc = new SqlCommand(
+                    "INSERT INTO Sucursales (Nombre, LocalidadID) VALUES (@Nombre, @LocalidadID)", con);
+                cmdSuc.Parameters.AddWithValue("@Nombre", nombreSucursal);
+                cmdSuc.Parameters.AddWithValue("@LocalidadID", nuevoLocalidadId);
+                cmdSuc.ExecuteNonQuery();
+            }
+
+            // 3️⃣ Refrescamos el combo
+            CargarSucursales();
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Sucursal agregada correctamente.');", true);
+        }
+
+        protected void btnNuevaSucursal_Click(object sender, EventArgs e)
+        {
+            string nombreSucursal = hiddenSucursalNombre.Value?.Trim();
+
+            if (string.IsNullOrEmpty(nombreSucursal))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Debe ingresar un nombre válido para la sucursal.');", true);
+                return;
+            }
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("INSERT INTO Sucursales (Nombre) VALUES (@Nombre)", con);
+                cmd.Parameters.AddWithValue("@Nombre", nombreSucursal);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            // Recargar sucursales para que aparezca la nueva
+            CargarSucursales();
+
+            // Seleccionarla automáticamente en el dropdown
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT SucursalID FROM Sucursales WHERE Nombre = @Nombre", con);
+                cmd.Parameters.AddWithValue("@Nombre", nombreSucursal);
+                con.Open();
+                int nuevaId = Convert.ToInt32(cmd.ExecuteScalar());
+                ddlSucursal.SelectedValue = nuevaId.ToString();
+            }
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Sucursal agregada correctamente.');", true);
+        }
+
 
         private string ObtenerNuevoNombre(int sucursalId)
         {
