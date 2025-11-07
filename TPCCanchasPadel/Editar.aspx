@@ -72,7 +72,6 @@
                 return;
             }
 
-            // Llamamos al servidor para crear la sucursal
             __doPostBack('AgregarSucursal', nombre + '|' + localidad);
         }
     </script>

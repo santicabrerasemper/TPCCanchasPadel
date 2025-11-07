@@ -76,9 +76,9 @@ namespace TPCCanchasPadel
 
             string query = "SELECT CanchaID, Nombre, EstadoID FROM Canchas WHERE SucursalID = @SucursalID";
 
-            if (ddlEstado.SelectedValue == "1") // Activos
+            if (ddlEstado.SelectedValue == "1")
                 query += " AND EstadoID = (SELECT EstadoID FROM Estados WHERE Nombre = 'Activo')";
-            else if (ddlEstado.SelectedValue == "2") // Inactivos
+            else if (ddlEstado.SelectedValue == "2")
                 query += " AND EstadoID = (SELECT EstadoID FROM Estados WHERE Nombre = 'Inactivo')";
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -112,7 +112,6 @@ namespace TPCCanchasPadel
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                // Alternar entre activo/inactivo
                 SqlCommand cmd = new SqlCommand(@"
                     UPDATE Canchas
                     SET EstadoID = CASE 
@@ -160,13 +159,11 @@ namespace TPCCanchasPadel
             {
                 con.Open();
 
-                // 1️⃣ Crear nueva localidad
                 SqlCommand cmdLoc = new SqlCommand(
                     "INSERT INTO Localidades (Nombre) VALUES (@Nombre); SELECT SCOPE_IDENTITY();", con);
                 cmdLoc.Parameters.AddWithValue("@Nombre", localidadNombre);
                 int nuevoLocalidadId = Convert.ToInt32(cmdLoc.ExecuteScalar());
 
-                // 2️⃣ Crear nueva sucursal con la localidad recién creada
                 SqlCommand cmdSuc = new SqlCommand(
                     "INSERT INTO Sucursales (Nombre, LocalidadID) VALUES (@Nombre, @LocalidadID)", con);
                 cmdSuc.Parameters.AddWithValue("@Nombre", nombreSucursal);
@@ -174,7 +171,6 @@ namespace TPCCanchasPadel
                 cmdSuc.ExecuteNonQuery();
             }
 
-            // 3️⃣ Refrescamos el combo
             CargarSucursales();
 
             ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Sucursal agregada correctamente.');", true);
@@ -198,10 +194,8 @@ namespace TPCCanchasPadel
                 cmd.ExecuteNonQuery();
             }
 
-            // Recargar sucursales para que aparezca la nueva
             CargarSucursales();
 
-            // Seleccionarla automáticamente en el dropdown
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("SELECT SucursalID FROM Sucursales WHERE Nombre = @Nombre", con);

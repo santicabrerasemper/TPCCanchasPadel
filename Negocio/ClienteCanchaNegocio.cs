@@ -48,11 +48,9 @@ namespace Negocio
                 datos.setearParametro("@SucursalID", sucursalId);
                 datos.ejecutarLectura();
 
-                // Determinar el EstadoID correspondiente a "Activo" (para mapear a bool)
-                int activoId = 1; // fallback
+                int activoId = 1;
                 try
                 {
-                    // intentamos obtenerlo desde la BD (una vez)
                     AccesoDatos d2 = new AccesoDatos();
                     d2.setearConsulta("SELECT EstadoID FROM Estados WHERE Nombre = 'Activo'");
                     d2.ejecutarLectura();
@@ -60,7 +58,7 @@ namespace Negocio
                         activoId = Convert.ToInt32(d2.Lector["EstadoID"]);
                     d2.cerrarConexion();
                 }
-                catch { /* si falla dejamos activoId = 1 */ }
+                catch { }
 
                 while (datos.Lector.Read())
                 {
@@ -74,10 +72,8 @@ namespace Negocio
                         NombreLocalidad = datos.Lector["NombreLocalidad"] != DBNull.Value ? datos.Lector["NombreLocalidad"].ToString() : string.Empty,
                     };
 
-                    // Mapeo lógico: Activa si EstadoID == activoId
                     cancha.Activa = (cancha.EstadoID == activoId);
 
-                    // Calcular precio estimado (podes usar tu regla)
                     decimal precioHora = 6000m;
                     double duracion = (horaFin - horaInicio).TotalHours;
                     cancha.TotalEstimado = precioHora * (decimal)duracion;
