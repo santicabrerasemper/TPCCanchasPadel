@@ -44,7 +44,7 @@ WHERE Usuario = @u;";
                 string passDb = datos.Lector.GetString(4);
                 int rolId = datos.Lector.GetInt32(5);
 
-                if (!SlowEquals(pass, passDb))
+                if (!ComparacionSegura(pass, passDb))
                     return null;
 
                 return new Usuario
@@ -66,7 +66,7 @@ WHERE Usuario = @u;";
             }
         }
 
-        private bool SlowEquals(string a, string b)
+        private bool ComparacionSegura(string a, string b)
         {
             if (a == null || b == null) return false;
             int diff = a.Length ^ b.Length;

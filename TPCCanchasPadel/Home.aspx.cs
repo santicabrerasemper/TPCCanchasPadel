@@ -11,7 +11,14 @@ namespace TPCCanchasPadel
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack && string.Equals(Request["contacto"], "ok", StringComparison.OrdinalIgnoreCase))
+            {
+                var html = @"<div class='alert alert-success alert-dismissible fade show' role='alert'>
+                       ¡Mensaje enviado! A la brevedad nos estaremos contactando contigo.
+                       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                     </div>";
+                phAlerta.Controls.Add(new Literal { Text = html });
+            }
         }
     }
 }

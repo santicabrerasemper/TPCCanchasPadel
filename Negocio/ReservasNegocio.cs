@@ -240,8 +240,7 @@ EXEC SP_ReservasOK
                     };
 
                     cancha.PrecioHora = 6000;
-
-                    // 🕒 Calcular total según duración
+               
                     double duracionHoras = (horaFin - horaInicio).TotalHours;
                     cancha.PrecioHora *= (decimal)duracionHoras;
 
