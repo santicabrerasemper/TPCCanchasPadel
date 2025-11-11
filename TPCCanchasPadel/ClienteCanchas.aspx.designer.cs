@@ -87,6 +87,42 @@ namespace TPCCanchasPadel
         protected global::System.Web.UI.WebControls.Label lblMensaje;
 
         /// <summary>
+        /// Control btnMisReservas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnMisReservas;
+
+        /// <summary>
+        /// Control lblMisReservasMsg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMisReservasMsg;
+
+        /// <summary>
+        /// Control gvMisReservas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvMisReservas;
+
+        /// <summary>
+        /// Control lblCantidadReservas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCantidadReservas;
+
+        /// <summary>
         /// Control gvCanchas.
         /// </summary>
         /// <remarks>
