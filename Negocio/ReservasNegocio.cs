@@ -259,6 +259,101 @@ EXEC SP_ReservasOK
             }
         }
 
+        public List<Reserva> ListarPorUsuario(int idUsuario)
+        {
+            List<Reserva> lista = new List<Reserva>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+        SELECT
+            r.ReservaID,
+            r.UsuarioID,
+            r.CanchaID,
+            r.Fecha,
+            r.HoraInicio,
+            r.HoraFin,
+            c.Nombre AS CanchaNombre,
+            e.Nombre AS EstadoNombre,
+            s.Nombre AS SucursalNombre
+        FROM Reservas r
+        INNER JOIN Canchas c   ON r.CanchaID = c.CanchaID
+        INNER JOIN Estados e   ON c.EstadoID = e.EstadoID
+        INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+        WHERE r.UsuarioID = @UsuarioID
+        ORDER BY r.Fecha DESC, r.HoraInicio;");
+
+                datos.setearParametro("@UsuarioID", idUsuario);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    try
+                    {
+                        Reserva reserva = new Reserva();
+
+                        reserva.IdReserva = datos.Lector["ReservaID"] != DBNull.Value
+                            ? Convert.ToInt32(datos.Lector["ReservaID"])
+                            : 0;
+
+                        reserva.FechaReserva = datos.Lector["Fecha"] != DBNull.Value
+                            ? Convert.ToDateTime(datos.Lector["Fecha"])
+                            : DateTime.MinValue;
+
+                        // HoraInicio / HoraFin
+                        reserva.HoraInicio = datos.Lector["HoraInicio"] != DBNull.Value
+                            ? (datos.Lector["HoraInicio"] is TimeSpan t1 ? t1 : ((DateTime)datos.Lector["HoraInicio"]).TimeOfDay)
+                            : TimeSpan.Zero;
+
+                        reserva.HoraFin = datos.Lector["HoraFin"] != DBNull.Value
+                            ? (datos.Lector["HoraFin"] is TimeSpan t2 ? t2 : ((DateTime)datos.Lector["HoraFin"]).TimeOfDay)
+                            : TimeSpan.Zero;
+
+                        reserva.Cancha = new Cancha
+                        {
+                            Nombre = datos.Lector["CanchaNombre"]?.ToString() ?? ""
+                        };
+                        reserva.Estado = new Estado
+                        {
+                            Nombre = datos.Lector["EstadoNombre"]?.ToString() ?? ""
+                        };
+                        reserva.Sucursal = new Sucursal
+                        {
+                            Nombre = datos.Lector["SucursalNombre"]?.ToString() ?? ""
+                        };
+
+                        lista.Add(reserva);
+                    }
+                    catch (Exception exFila)
+                    {
+                        throw new Exception("Error en fila: " +
+                            string.Join(" | ",
+                                "ReservaID=" + datos.Lector["ReservaID"],
+                                "Fecha=" + datos.Lector["Fecha"],
+                                "HoraInicio=" + datos.Lector["HoraInicio"],
+                                "HoraFin=" + datos.Lector["HoraFin"]
+                            ) + " -> " + exFila.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar reservas del usuario: " + ex.Message, ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return lista;
+
+
+        }
+
+
+
+
     }
 
 }

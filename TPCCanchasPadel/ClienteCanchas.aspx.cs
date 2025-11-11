@@ -159,6 +159,51 @@ namespace TPCCanchasPadel
             }
         }
 
+        protected void btnMisReservas_Click(object sender, EventArgs e)
+        {
+            if (Session["Usuario"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+            ReservasNegocio negocio = new ReservasNegocio();
+
+            try
+            {
+                lblMisReservasMsg.Text = "Usuario ID: " + usuario.UsuarioID;
+
+                List<Reserva> reservas = negocio.ListarPorUsuario(usuario.UsuarioID);
+
+                if (reservas != null && reservas.Count > 0)
+                {
+                    gvMisReservas.Visible = true;
+                    gvMisReservas.DataSource = reservas;
+                    gvMisReservas.DataBind();
+
+                    lblMisReservasMsg.Text = "";
+                    lblCantidadReservas.Text = $"Total de reservas: {reservas.Count}";
+                }
+                else
+                {
+                    gvMisReservas.Visible = false;
+                    lblMisReservasMsg.Text = "Todavía no hiciste ninguna reserva.";
+                    lblCantidadReservas.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                gvMisReservas.Visible = false;
+                lblMisReservasMsg.Text =
+                    "⚠️ Error al listar tus reservas: " + ex.Message +
+                    (ex.InnerException != null ? " | " + ex.InnerException.Message : "") +
+                    "<br><br><strong>Detalle completo:</strong><br>" + ex.ToString();
+            }
+        }
+
+
+
         private decimal CalcularPrecio(TimeSpan horaInicio, TimeSpan horaFin)
         {
             decimal precioHora = 6000m;

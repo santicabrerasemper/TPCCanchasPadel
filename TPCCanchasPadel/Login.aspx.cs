@@ -29,8 +29,7 @@ namespace TPCCanchasPadel
                 return;
             }
 
-            Session["UsuarioID"] = user.UsuarioID;
-            Session["Usuario"] = user.NombreUsuario; 
+            Session["Usuario"] = user;
             Session["RolID"] = user.RolID;
 
             if (user.RolID == 1)
