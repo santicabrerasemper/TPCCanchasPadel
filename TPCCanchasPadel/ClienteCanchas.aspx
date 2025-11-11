@@ -63,6 +63,16 @@
           <div class="col-12 col-md-3">
             <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click"/>
           </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+    <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda"
+        CssClass="btn btn-secondary w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
+</div>
+
+
+          <div class="col-12 col-md-3 d-none">
+            <asp:Button ID="btnEditar" runat="server" Text="Editar" CssClass="btn btn-info w-100" PostBackUrl="Editar.aspx" Visible="false"/>
+          </div>
         </div>
 
         <asp:Label ID="lblMensaje" runat="server" CssClass="fw-semibold d-block mt-3"></asp:Label>
@@ -72,10 +82,9 @@
         <h3 class="h5 fw-bold mb-3">Resultados</h3>
 
         <asp:GridView ID="gvCanchas" runat="server"
-          CssClass="table table-striped table-hover text-center mb-0"
-          AutoGenerateColumns="false"
-          OnRowCommand="gvCanchas_RowCommand"
-          Visible="false">
+    CssClass="table table-striped table-hover text-center mb-0"
+    AutoGenerateColumns="false"
+    OnRowCommand="grillaCanchas_ComandoReserva" Visible="false">
           <Columns>
             <asp:BoundField DataField="CanchaID" HeaderText="ID" Visible="false" />
 
