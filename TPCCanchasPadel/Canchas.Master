@@ -13,7 +13,7 @@
 
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="<%: ResolveUrl("~/Home.aspx") %>">¿DÓNDE JUEGO?</a>
+        <asp:HyperLink ID="lnkMarca" runat="server" CssClass="navbar-brand fw-bold">¿DÓNDE JUEGO?</asp:HyperLink>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
                 aria-controls="nav" aria-expanded="false" aria-label="Menú">
@@ -21,13 +21,28 @@
         </button>
 
         <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav mx-auto">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item" id="liInicio" runat="server">
+              <a class="nav-link" href="<%: ResolveUrl("~/Home.aspx") %>">Inicio</a>
+            </li>
           </ul>
-          <a class="btn btn-success" href="<%: ResolveUrl("~/Login.aspx") %>">Iniciar sesión</a>
+
+          <asp:PlaceHolder ID="phAnonimo" runat="server">
+            <a class="btn btn-success" href="<%: ResolveUrl("~/Login.aspx") %>">Iniciar sesión</a>
+          </asp:PlaceHolder>
+
+          <asp:PlaceHolder ID="phAutenticado" runat="server" Visible="false">
+            <a class="btn btn-outline-danger" href="<%: ResolveUrl("~/Login.aspx") %>">Cerrar sesión</a>
+          </asp:PlaceHolder>
         </div>
       </div>
     </nav>
-    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+
+  
+<main id="contenido" class="pt-4">
+  <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+</main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </form>
 </body>
