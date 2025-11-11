@@ -16,7 +16,7 @@ namespace TPCCanchasPadel
         {
             if (Session["RolID"] == null || Convert.ToInt32(Session["RolID"]) != 1)
             {
-                Response.Redirect("ClienteCanchas.aspx");
+                Response.Redirect("Login.aspx");
                 return;
             }
 

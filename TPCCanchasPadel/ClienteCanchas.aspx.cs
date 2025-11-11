@@ -19,7 +19,6 @@ namespace TPCCanchasPadel
                 lblMensaje.Text = "";
                 CargarSucursales();
             }
-            VerificarRolAdministrador();
         }
 
         private void CargarSucursales()
@@ -193,31 +192,6 @@ namespace TPCCanchasPadel
         </style>
     ";
         }
-
-        private void VerificarRolAdministrador()
-        {
-            try
-            {
-                var rolId = Session["RolID"];
-                var usuario = Session["Usuario"];
-
-                if (rolId == null || usuario == null)
-                {
-                    btnEditar.Visible = false;
-                    return;
-                }
-
-                if (Convert.ToInt32(rolId) == 1)
-                    btnEditar.Visible = true;
-                else
-                    btnEditar.Visible = false;
-            }
-            catch
-            {
-                btnEditar.Visible = false;
-            }
-        }
-
 
     }
 }

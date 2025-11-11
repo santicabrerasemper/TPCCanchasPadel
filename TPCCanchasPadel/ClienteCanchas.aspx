@@ -63,10 +63,6 @@
           <div class="col-12 col-md-3">
             <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click"/>
           </div>
-
-          <div class="col-12 col-md-3 d-none">
-            <asp:Button ID="btnEditar" runat="server" Text="Editar" CssClass="btn btn-info w-100" PostBackUrl="Editar.aspx" Visible="false"/>
-          </div>
         </div>
 
         <asp:Label ID="lblMensaje" runat="server" CssClass="fw-semibold d-block mt-3"></asp:Label>
@@ -86,6 +82,8 @@
             <asp:BoundField DataField="Nombre" HeaderText="Cancha" />
 
             <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
+
+            <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
 
             <asp:BoundField DataField="TotalEstimado" HeaderText="Total estimado" DataFormatString="{0:C}" />
 
