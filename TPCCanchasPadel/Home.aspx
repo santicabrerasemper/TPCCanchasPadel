@@ -20,10 +20,6 @@
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-  <div class="container mt-3" style="max-width: 960px;">
-    <asp:PlaceHolder ID="phAlerta" runat="server"></asp:PlaceHolder>
-  </div>
-
   <section class="hero-bg">
     <div class="container py-5">
       <h1 class="mb-3">
@@ -33,6 +29,10 @@
       <a href="Contacto.aspx" class="btn btn-success px-3">Contactanos</a>
     </div>
   </section>
+
+  <div class="container mb-3" style="max-width: 960px;">
+    <asp:PlaceHolder ID="phAlerta" runat="server"></asp:PlaceHolder>
+  </div>
 
   <div class="row text-center g-4 py-5 bg-white">
     <div class="col-md-4">

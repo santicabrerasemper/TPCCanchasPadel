@@ -16,5 +16,7 @@ namespace Dominio
         public TimeSpan HoraFin { get; set; }           
         public Promocion Promocion { get; set; }
 
+        public Estado Estado { get; set; }
+        public Sucursal Sucursal { get; set; }
     }
 }

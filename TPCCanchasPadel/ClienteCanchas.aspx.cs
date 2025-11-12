@@ -13,6 +13,7 @@ namespace TPCCanchasPadel
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.RequerirSesion(this);
             if (!IsPostBack)
             {
                 gvCanchas.Visible = false;
@@ -159,6 +160,51 @@ namespace TPCCanchasPadel
             }
         }
 
+        protected void btnMisReservas_Click(object sender, EventArgs e)
+        {
+            if (Session["Usuario"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+            ReservasNegocio negocio = new ReservasNegocio();
+
+            try
+            {
+                lblMisReservasMsg.Text = "Usuario ID: " + usuario.UsuarioID;
+
+                List<Reserva> reservas = negocio.ListarPorUsuario(usuario.UsuarioID);
+
+                if (reservas != null && reservas.Count > 0)
+                {
+                    gvMisReservas.Visible = true;
+                    gvMisReservas.DataSource = reservas;
+                    gvMisReservas.DataBind();
+
+                    lblMisReservasMsg.Text = "";
+                    lblCantidadReservas.Text = $"Total de reservas: {reservas.Count}";
+                }
+                else
+                {
+                    gvMisReservas.Visible = false;
+                    lblMisReservasMsg.Text = "Todavía no hiciste ninguna reserva.";
+                    lblCantidadReservas.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                gvMisReservas.Visible = false;
+                lblMisReservasMsg.Text =
+                    "⚠️ Error al listar tus reservas: " + ex.Message +
+                    (ex.InnerException != null ? " | " + ex.InnerException.Message : "") +
+                    "<br><br><strong>Detalle completo:</strong><br>" + ex.ToString();
+            }
+        }
+
+
+
         private decimal CalcularPrecio(TimeSpan horaInicio, TimeSpan horaFin)
         {
             decimal precioHora = 6000m;
@@ -210,28 +256,16 @@ namespace TPCCanchasPadel
 
         private void VerificarRolAdministrador()
         {
-            try
-            {
-                var rolId = Session["RolID"];
-                var usuario = Session["Usuario"];
-
-                if (rolId == null || usuario == null)
-                {
-                    btnEditar.Visible = false;
-                    return;
-                }
-
-                if (Convert.ToInt32(rolId) == 1)
-                    btnEditar.Visible = true;
-                else
-                    btnEditar.Visible = false;
-            }
-            catch
-            {
-                btnEditar.Visible = false;
-            }
+            btnEditar.Visible = Seguridad.EsAdmin(Session);
         }
 
+       
+
+        protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
+        {
+            Session["MensajeInfo"] = "Listo, podés realizar una nueva búsqueda.";
+            Response.Redirect(Request.RawUrl);
+        }
 
     }
 }
