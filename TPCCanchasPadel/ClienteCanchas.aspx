@@ -64,14 +64,13 @@
             <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click"/>
           </div>
 
-            <div class="col-md-3 d-flex align-items-end">
-    <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda"
-        CssClass="btn btn-secondary w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
-</div>
+          <div class="col-md-3 d-flex align-items-end">
+              <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda" CssClass="btn btn-secondary w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
+          </div>
 
 
           <div class="col-12 col-md-3 d-none">
-            <asp:Button ID="btnEditar" runat="server" Text="Editar" CssClass="btn btn-info w-100" PostBackUrl="Editar.aspx" Visible="false"/>
+            
           </div>
         </div>
 

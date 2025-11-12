@@ -16,6 +16,9 @@ namespace TPCCanchasPadel
             Seguridad.RequerirSesion(this);
             if (!IsPostBack)
             {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-AR");
+                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-AR");
+
                 gvCanchas.Visible = false;
                 lblMensaje.Text = "";
                 btnNuevaBusqueda.Visible = false;
@@ -28,7 +31,7 @@ namespace TPCCanchasPadel
                     Session["MensajeInfo"] = null;
                 }
             }
-            VerificarRolAdministrador();
+            
         }
 
 
@@ -124,7 +127,14 @@ namespace TPCCanchasPadel
                     DateTime fecha = DateTime.Parse(txtFecha.Text);
                     TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
                     TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
-                    int usuarioId = 1; 
+                    if (Session["Usuario"] == null)
+                    {
+                        Response.Redirect("Login.aspx");
+                        return;
+                    }
+
+                    Usuario usuario = (Usuario)Session["Usuario"];
+                    int usuarioId = usuario.UsuarioID;
 
                     ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
 
@@ -252,11 +262,6 @@ namespace TPCCanchasPadel
                     to {{ opacity: 1; transform: translateY(0); }}
                 }}
             </style>";
-        }
-
-        private void VerificarRolAdministrador()
-        {
-            btnEditar.Visible = Seguridad.EsAdmin(Session);
         }
 
        
