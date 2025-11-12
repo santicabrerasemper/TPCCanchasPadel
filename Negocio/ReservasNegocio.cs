@@ -15,26 +15,26 @@ namespace Negocio
             try
             {
                 string sql = @"
-SELECT
-    r.ReservaID,                 -- 0
-    r.UsuarioID,                 -- 1
-    r.CanchaID,                  -- 2
-    r.Fecha,                     -- 3 (DATE)
-    r.HoraInicio,                -- 4 (TIME)
-    r.HoraFin,                   -- 5 (TIME)
-    r.PromocionID,               -- 6 (nullable)
-    u.Nombre      AS UsuarioNombre,   -- 7
-    u.Apellido    AS UsuarioApellido, -- 8
-    c.Nombre      AS CanchaNombre,    -- 9
-    e.Nombre      AS EstadoCancha,    -- 10
-    p.Descripcion AS PromoDescripcion,-- 11 (nullable)
-    p.Descuento   AS PromoDescuento   -- 12 (nullable, TINYINT)
-FROM Reservas r
-JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
-JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
-JOIN Estados  e  ON e.EstadoID  = c.EstadoID
-LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
-ORDER BY r.Fecha, r.HoraInicio;";
+            SELECT
+                r.ReservaID,                 -- 0
+                r.UsuarioID,                 -- 1
+                r.CanchaID,                  -- 2
+                r.Fecha,                     -- 3 (DATE)
+                r.HoraInicio,                -- 4 (TIME)
+                r.HoraFin,                   -- 5 (TIME)
+                r.PromocionID,               -- 6 (nullable)
+                u.Nombre      AS UsuarioNombre,   -- 7
+                u.Apellido    AS UsuarioApellido, -- 8
+                c.Nombre      AS CanchaNombre,    -- 9
+                e.Nombre      AS EstadoCancha,    -- 10
+                p.Descripcion AS PromoDescripcion,-- 11 (nullable)
+                p.Descuento   AS PromoDescuento   -- 12 (nullable, TINYINT)
+            FROM Reservas r
+            JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
+            JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
+            JOIN Estados  e  ON e.EstadoID  = c.EstadoID
+            LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
+            ORDER BY r.Fecha, r.HoraInicio;";
 
                 datos.setearConsulta(sql);
                 datos.ejecutarLectura();
@@ -86,26 +86,26 @@ ORDER BY r.Fecha, r.HoraInicio;";
             try
             {
                 string sql = @"
-SELECT
-    r.ReservaID,
-    r.UsuarioID,
-    r.CanchaID,
-    r.Fecha,
-    r.HoraInicio,
-    r.HoraFin,
-    r.PromocionID,
-    u.Nombre      AS UsuarioNombre,
-    u.Apellido    AS UsuarioApellido,
-    c.Nombre      AS CanchaNombre,
-    e.Nombre      AS EstadoCancha,
-    p.Descripcion AS PromoDescripcion,
-    p.Descuento   AS PromoDescuento
-FROM Reservas r
-JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
-JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
-JOIN Estados  e  ON e.EstadoID  = c.EstadoID
-LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
-WHERE r.ReservaID = @id;";
+                SELECT
+                    r.ReservaID,
+                    r.UsuarioID,
+                    r.CanchaID,
+                    r.Fecha,
+                    r.HoraInicio,
+                    r.HoraFin,
+                    r.PromocionID,
+                    u.Nombre      AS UsuarioNombre,
+                    u.Apellido    AS UsuarioApellido,
+                    c.Nombre      AS CanchaNombre,
+                    e.Nombre      AS EstadoCancha,
+                    p.Descripcion AS PromoDescripcion,
+                    p.Descuento   AS PromoDescuento
+                FROM Reservas r
+                JOIN Usuarios u  ON u.UsuarioID = r.UsuarioID
+                JOIN Canchas  c  ON c.CanchaID  = r.CanchaID
+                JOIN Estados  e  ON e.EstadoID  = c.EstadoID
+                LEFT JOIN Promociones p ON p.PromocionID = r.PromocionID
+                WHERE r.ReservaID = @id;";
 
                 datos.setearConsulta(sql);
                 datos.setearParametro("@id", idReserva);
@@ -155,14 +155,14 @@ WHERE r.ReservaID = @id;";
             {
 
                 string sql = @"
-EXEC SP_ReservasOK
-    @UsuarioID   = @usuarioId,
-    @CanchaID    = @canchaId,
-    @Fecha       = @fecha,
-    @HoraInicio  = @horaInicio,
-    @HoraFin     = @horaFin,
-    @PromocionID = @promoId;
-";             
+                EXEC SP_ReservasOK
+                    @UsuarioID   = @usuarioId,
+                    @CanchaID    = @canchaId,
+                    @Fecha       = @fecha,
+                    @HoraInicio  = @horaInicio,
+                    @HoraFin     = @horaFin,
+                    @PromocionID = @promoId;
+                ";             
 
                 datos.setearConsulta(sql);
                 datos.setearParametro("@usuarioId", reserva.Usuario.UsuarioID);
@@ -204,22 +204,22 @@ EXEC SP_ReservasOK
             try
             {
                 string consulta = @"
-    SELECT 
-        c.CanchaID, 
-        c.Nombre, 
-        c.SucursalID, 
-        s.Nombre AS NombreSucursal, 
-        c.EstadoID
-    FROM Canchas c
-    INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-    WHERE c.CanchaID NOT IN (
-        SELECT r.CanchaID
-        FROM Reservas r
-        WHERE r.Fecha = @Fecha
-        AND r.HoraInicio < @HoraFin
-        AND r.HoraFin > @HoraInicio
-    )
-    ORDER BY s.Nombre, c.Nombre;";
+                SELECT 
+                    c.CanchaID, 
+                    c.Nombre, 
+                    c.SucursalID, 
+                    s.Nombre AS NombreSucursal, 
+                    c.EstadoID
+                FROM Canchas c
+                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+                WHERE c.CanchaID NOT IN (
+                    SELECT r.CanchaID
+                    FROM Reservas r
+                    WHERE r.Fecha = @Fecha
+                    AND r.HoraInicio < @HoraFin
+                    AND r.HoraFin > @HoraInicio
+                )
+                ORDER BY s.Nombre, c.Nombre;";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@Fecha", fecha);
@@ -268,22 +268,22 @@ EXEC SP_ReservasOK
             try
             {
                 datos.setearConsulta(@"
-        SELECT
-            r.ReservaID,
-            r.UsuarioID,
-            r.CanchaID,
-            r.Fecha,
-            r.HoraInicio,
-            r.HoraFin,
-            c.Nombre AS CanchaNombre,
-            e.Nombre AS EstadoNombre,
-            s.Nombre AS SucursalNombre
-        FROM Reservas r
-        INNER JOIN Canchas c   ON r.CanchaID = c.CanchaID
-        INNER JOIN Estados e   ON c.EstadoID = e.EstadoID
-        INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-        WHERE r.UsuarioID = @UsuarioID
-        ORDER BY r.Fecha DESC, r.HoraInicio;");
+                SELECT
+                    r.ReservaID,
+                    r.UsuarioID,
+                    r.CanchaID,
+                    r.Fecha,
+                    r.HoraInicio,
+                    r.HoraFin,
+                    c.Nombre AS CanchaNombre,
+                    e.Nombre AS EstadoNombre,
+                    s.Nombre AS SucursalNombre
+                FROM Reservas r
+                INNER JOIN Canchas c   ON r.CanchaID = c.CanchaID
+                INNER JOIN Estados e   ON c.EstadoID = e.EstadoID
+                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+                WHERE r.UsuarioID = @UsuarioID
+                ORDER BY r.Fecha DESC, r.HoraInicio;");
 
                 datos.setearParametro("@UsuarioID", idUsuario);
                 datos.ejecutarLectura();
@@ -302,7 +302,6 @@ EXEC SP_ReservasOK
                             ? Convert.ToDateTime(datos.Lector["Fecha"])
                             : DateTime.MinValue;
 
-                        // HoraInicio / HoraFin
                         reserva.HoraInicio = datos.Lector["HoraInicio"] != DBNull.Value
                             ? (datos.Lector["HoraInicio"] is TimeSpan t1 ? t1 : ((DateTime)datos.Lector["HoraInicio"]).TimeOfDay)
                             : TimeSpan.Zero;
@@ -360,20 +359,20 @@ EXEC SP_ReservasOK
             try
             {
                 string consulta = @"
-            SELECT 
-                r.ReservaID,
-                s.Nombre AS Sucursal,
-                c.Nombre AS Cancha,
-                u.Usuario AS Usuario,
-                r.Fecha,
-                r.HoraInicio,
-                r.HoraFin
-            FROM Reservas r
-            INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
-            INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-            INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
-            ORDER BY r.Fecha DESC, r.HoraInicio;
-        ";
+                    SELECT 
+                        r.ReservaID,
+                        s.Nombre AS Sucursal,
+                        c.Nombre AS Cancha,
+                        u.Nombre + ' ' + u.Apellido AS Usuario,
+                        r.Fecha,
+                        r.HoraInicio,
+                        r.HoraFin
+                    FROM Reservas r
+                    INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
+                    INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+                    INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
+                    ORDER BY r.Fecha DESC, r.HoraInicio;
+                ";
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
@@ -429,69 +428,131 @@ EXEC SP_ReservasOK
             }
         }
 
-        public List<Reserva> ListarPorCanchaYFecha(int idCancha, DateTime fecha)
+        public List<ReservaAdmin> ListarPorCanchaYFecha(int idCancha, DateTime fecha)
         {
-            List<Reserva> lista = new List<Reserva>();
-            AccesoDatos datos = new AccesoDatos();
+            var lista = new List<ReservaAdmin>();
+            var datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"
-            SELECT 
-                R.ReservaID,
-                S.Nombre AS Sucursal,
-                C.Nombre AS Cancha,
-                U.Nombre + ' ' + U.Apellido AS Usuario,
-                R.Fecha,
-                R.HoraInicio,
-                R.HoraFin
-            FROM Reservas R
-            INNER JOIN Canchas C ON R.CanchaID = C.CanchaID
-            INNER JOIN Sucursales S ON C.SucursalID = S.SucursalID
-            INNER JOIN Usuarios U ON R.UsuarioID = U.UsuarioID
-            WHERE R.CanchaID = @idCancha AND R.Fecha = @fecha
-            ORDER BY R.HoraInicio;
-        ");
-
+                string consulta = @"
+                    SELECT 
+                        R.ReservaID,
+                        S.Nombre AS Sucursal,
+                        C.Nombre AS Cancha,
+                        U.Usuario AS Usuario,
+                        R.Fecha,
+                        R.HoraInicio,
+                        R.HoraFin
+                    FROM Reservas R
+                    INNER JOIN Canchas C ON R.CanchaID = C.CanchaID
+                    INNER JOIN Sucursales S ON C.SucursalID = S.SucursalID
+                    INNER JOIN Usuarios U ON R.UsuarioID = U.UsuarioID
+                    WHERE R.CanchaID = @idCancha AND R.Fecha = @fecha
+                    ORDER BY R.HoraInicio;
+                ";
+                datos.setearConsulta(consulta);
                 datos.setearParametro("@idCancha", idCancha);
                 datos.setearParametro("@fecha", fecha);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    var reserva = new Reserva
+                    var reserva = new ReservaAdmin
                     {
-                        IdReserva = (int)datos.Lector["ReservaID"],
-                        FechaReserva = (DateTime)datos.Lector["Fecha"],
-                        HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
-                        HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                        ReservaID = (int)datos.Lector["ReservaID"],
+                        Sucursal = (string)datos.Lector["Sucursal"],
+                        Cancha = (string)datos.Lector["Cancha"],
+                        Usuario = (string)datos.Lector["Usuario"],
+                        Fecha = (DateTime)datos.Lector["Fecha"],
+                        HoraInicio = datos.Lector["HoraInicio"].ToString(),
+                        HoraFin = datos.Lector["HoraFin"].ToString()
 
-                        // Objetos anidados
-                        Cancha = new Cancha
-                        {
-                            Nombre = (string)datos.Lector["Cancha"]
-                        },
-                        Usuario = new Usuario
-                        {
-                            Nombre = (string)datos.Lector["Usuario"]
-                        }
                     };
 
                     lista.Add(reserva);
                 }
+            }
+            
+            finally
+            {
+                datos.cerrarConexion();
+            }
 
-                return lista;
+            return lista;
+        }
+
+        public List<ReservaAdmin> ListarFiltradas(int? sucursalID = null, int? canchaID = null, DateTime? fecha = null)
+        {
+            var lista = new List<ReservaAdmin>();
+            var datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+                SELECT 
+                    r.ReservaID,
+                    s.Nombre AS Sucursal,
+                    c.Nombre AS Cancha,
+                    u.Nombre + ' ' + u.Apellido AS Usuario,
+                    r.Fecha,
+                    r.HoraInicio,
+                    r.HoraFin
+                FROM Reservas r
+                INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
+                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+                INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
+                WHERE 1=1";
+
+                if (sucursalID.HasValue)
+                {
+                    consulta += " AND s.SucursalID = @SucursalID";
+                    datos.setearParametro("@SucursalID", sucursalID.Value);
+                }
+
+                if (canchaID.HasValue)
+                {
+                    consulta += " AND c.CanchaID = @CanchaID";
+                    datos.setearParametro("@CanchaID", canchaID.Value);
+                }
+
+                if (fecha.HasValue)
+                {
+                    consulta += " AND CONVERT(date, r.Fecha) = @Fecha";
+                    datos.setearParametro("@Fecha", fecha.Value.Date);
+                }
+
+                consulta += " ORDER BY r.Fecha DESC, r.HoraInicio";
+
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    var reserva = new ReservaAdmin
+                    {
+                        ReservaID = (int)datos.Lector["ReservaID"],
+                        Sucursal = (string)datos.Lector["Sucursal"],
+                        Cancha = (string)datos.Lector["Cancha"],
+                        Usuario = (string)datos.Lector["Usuario"],
+                        Fecha = (DateTime)datos.Lector["Fecha"],
+                        HoraInicio = datos.Lector["HoraInicio"].ToString(),
+                        HoraFin = datos.Lector["HoraFin"].ToString()
+                    };
+                    lista.Add(reserva);
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al listar reservas por cancha y fecha: " + ex.Message);
+                throw new Exception("Error al listar reservas filtradas: " + ex.Message);
             }
             finally
             {
                 datos.cerrarConexion();
             }
-        }
 
+            return lista;
+        }
 
 
     }

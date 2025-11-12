@@ -46,7 +46,6 @@ namespace Negocio
                 datos.setearParametro("@HoraFin", horaFin);
                 datos.ejecutarLectura();
 
-                // Buscar el ID de estado "Activo"
                 int activoId = 1;
                 try
                 {
@@ -59,7 +58,6 @@ namespace Negocio
                 }
                 catch { }
 
-                // Cargar resultados
                 while (datos.Lector.Read())
                 {
                     var cancha = new Cancha

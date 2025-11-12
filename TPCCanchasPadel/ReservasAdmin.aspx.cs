@@ -22,7 +22,6 @@ namespace TPCCanchasPadel
             }
         }
 
-        // 🔹 Cargar todas las reservas sin filtros (inicio)
         private void CargarReservas()
         {
             var lista = reservasNegocio.ListarReservas();
@@ -30,7 +29,6 @@ namespace TPCCanchasPadel
             gvCanchas.DataBind();
         }
 
-        // 🔹 Cargar sucursales en el primer dropdown
         private void CargarSucursales()
         {
             var sucursales = sucursalNegocio.ListarSucursales();
@@ -42,7 +40,6 @@ namespace TPCCanchasPadel
             ddlSucursal.Items.Insert(0, new ListItem("-- Seleccione una sucursal --", ""));
         }
 
-        // 🔹 Al cambiar la sucursal, se cargan las canchas
         protected void ddlSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
             ddlCancha.Items.Clear();
@@ -60,28 +57,33 @@ namespace TPCCanchasPadel
 
                 ddlCancha.Items.Insert(0, new ListItem("-- Seleccione una cancha --", ""));
             }
+            CargarReservasFiltradas();
         }
 
-        // 🔹 Al cambiar la cancha, se cargan las fechas disponibles
         protected void ddlCancha_SelectedIndexChanged(object sender, EventArgs e)
         {
             ddlFecha.Items.Clear();
 
             if (!string.IsNullOrEmpty(ddlCancha.SelectedValue))
             {
-                int CanchaID = int.Parse(ddlCancha.SelectedValue);
-                var fechas = reservasNegocio.ListarFechasDisponiblesPorCancha(CanchaID);
+                int canchaID = int.Parse(ddlCancha.SelectedValue);
+                var fechas = reservasNegocio.ListarFechasDisponiblesPorCancha(canchaID);
 
-                ddlFecha.DataSource = fechas;
-                ddlFecha.DataTextField = "Fecha";
-                ddlFecha.DataValueField = "Fecha";
+                ddlFecha.DataSource = fechas.Select(f => new
+                {
+                    FechaTexto = f.ToString("dd/MM/yyyy"),
+                    FechaValor = f.ToString("o") 
+                }).ToList();
+
+                ddlFecha.DataTextField = "FechaTexto";
+                ddlFecha.DataValueField = "FechaValor";
                 ddlFecha.DataBind();
 
                 ddlFecha.Items.Insert(0, new ListItem("-- Seleccione una fecha --", ""));
             }
+            CargarReservasFiltradas();
         }
 
-        // 🔹 Al cambiar la fecha, se filtran las reservas
         protected void ddlFecha_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(ddlCancha.SelectedValue) && !string.IsNullOrEmpty(ddlFecha.SelectedValue))
@@ -95,7 +97,6 @@ namespace TPCCanchasPadel
             }
         }
 
-        // 🔹 Botón para eliminar reservas seleccionadas
         protected void btnEliminarReserva_Click(object sender, EventArgs e)
         {
             foreach (GridViewRow row in gvCanchas.Rows)
@@ -110,14 +111,33 @@ namespace TPCCanchasPadel
                 }
             }
 
-            CargarReservas(); // refrescar la grilla
+            CargarReservas(); 
         }
 
-        // 🔹 Redirigir a la página de edición
         protected void btnEditar_Click(object sender, EventArgs e)
         {
             Response.Redirect("Editar.aspx");
         }
+        
+        protected void btnEditarSucursales_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Editar.aspx");
+        }
+
+        private void CargarReservasFiltradas()
+        {
+            int tempInt;
+            int? sucursalId = int.TryParse(ddlSucursal.SelectedValue, out tempInt) ? (int?)tempInt : null;
+            int? canchaId = int.TryParse(ddlCancha.SelectedValue, out tempInt) ? (int?)tempInt : null;
+
+            DateTime tempDate;
+            DateTime? fecha = DateTime.TryParse(ddlFecha.SelectedValue, out tempDate) ? (DateTime?)tempDate : null;
+
+            var reservas = reservasNegocio.ListarFiltradas(sucursalId, canchaId, fecha);
+            gvCanchas.DataSource = reservas;
+            gvCanchas.DataBind();
+        }
+
     }
 }
 

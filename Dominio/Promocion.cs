@@ -19,6 +19,6 @@ namespace Dominio
         public bool EstaVigenteEn(DateTime fecha) =>
             fecha.Date >= FechaInicio.Date && fecha.Date <= FechaFin.Date;
 
-        public decimal DescuentoComoFactor => Descuento / 100m; // ej: 0.20
+        public decimal DescuentoComoFactor => Descuento / 100m;
     }
 }

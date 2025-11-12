@@ -47,9 +47,9 @@
         </asp:GridView>
     
         <div class="text-center mt-4">
-            <asp:Button ID="btnCambiarEstado" runat="server" Text="Eliminar Reserva" CssClass="btn btn-warning me-2" OnClick="btnEliminarReserva_Click" />
-            <asp:Button ID="btnEditarReserva" runat="server" Text="Editar Reserva" CssClass="btn btn-success me-2" OnClick="btnEditar_Click" />
-            <a href="Editar.aspx" class="btn btn-secondary">Editar</a>
+            <asp:Button ID="btnCambiarEstado" runat="server" Text="Eliminar Reserva" CssClass="btn btn-danger me-2" OnClick="btnEliminarReserva_Click" />
+            <!-- <asp:Button ID="btnEditarReserva" runat="server" Text="Editar Reserva" CssClass="btn btn-info me-2" OnClick="btnEditar_Click" /> -->
+            <asp:Button ID="btnEditarSucursales" runat="server" Text="Editar Sucursales" CssClass="btn btn-success me-2" OnClick="btnEditarSucursales_Click" />
         </div>
         
         
