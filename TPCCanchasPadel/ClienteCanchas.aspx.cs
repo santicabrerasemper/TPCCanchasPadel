@@ -277,6 +277,12 @@ namespace TPCCanchasPadel
             }
         }
 
+        protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
+        {
+            
+            Response.Redirect("ClienteCanchas.aspx");
+        }
+
 
     }
 }
