@@ -122,6 +122,7 @@
     <Content Include="Editar.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="Canchas.Master" />
+    <Content Include="ReservasAdmin.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -236,6 +237,13 @@
     </Compile>
     <Compile Include="Registro.aspx.designer.cs">
       <DependentUpon>Registro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReservasAdmin.aspx.cs">
+      <DependentUpon>ReservasAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReservasAdmin.aspx.designer.cs">
+      <DependentUpon>ReservasAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

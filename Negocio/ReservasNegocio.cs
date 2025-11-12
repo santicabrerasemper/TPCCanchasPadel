@@ -259,6 +259,147 @@ EXEC SP_ReservasOK
             }
         }
 
+        public List<ReservaAdmin> ListarReservas()
+        {
+            var lista = new List<ReservaAdmin>();
+            var datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+            SELECT 
+                r.ReservaID,
+                s.Nombre AS Sucursal,
+                c.Nombre AS Cancha,
+                u.Usuario AS Usuario,
+                r.Fecha,
+                r.HoraInicio,
+                r.HoraFin
+            FROM Reservas r
+            INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
+            INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+            INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
+            ORDER BY r.Fecha DESC, r.HoraInicio;
+        ";
+
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    var reserva = new ReservaAdmin
+                    {
+                        ReservaID = (int)datos.Lector["ReservaID"],
+                        Sucursal = (string)datos.Lector["Sucursal"],
+                        Cancha = (string)datos.Lector["Cancha"],
+                        Usuario = (string)datos.Lector["Usuario"],
+                        Fecha = (DateTime)datos.Lector["Fecha"],
+                        HoraInicio = datos.Lector["HoraInicio"].ToString(),
+                        HoraFin = datos.Lector["HoraFin"].ToString()
+                    };
+                    lista.Add(reserva);
+                }
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return lista;
+        }
+
+        public List<DateTime> ListarFechasDisponiblesPorCancha(int idCancha)
+        {
+            List<DateTime> lista = new List<DateTime>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT DISTINCT Fecha FROM Reservas WHERE IdCancha = @idCancha ORDER BY Fecha DESC");
+                datos.setearParametro("@idCancha", idCancha);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add((DateTime)datos.Lector["Fecha"]);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public List<Reserva> ListarPorCanchaYFecha(int idCancha, DateTime fecha)
+        {
+            List<Reserva> lista = new List<Reserva>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+            SELECT 
+                R.ReservaID,
+                S.Nombre AS Sucursal,
+                C.Nombre AS Cancha,
+                U.Nombre + ' ' + U.Apellido AS Usuario,
+                R.Fecha,
+                R.HoraInicio,
+                R.HoraFin
+            FROM Reservas R
+            INNER JOIN Canchas C ON R.CanchaID = C.CanchaID
+            INNER JOIN Sucursales S ON C.SucursalID = S.SucursalID
+            INNER JOIN Usuarios U ON R.UsuarioID = U.UsuarioID
+            WHERE R.CanchaID = @idCancha AND R.Fecha = @fecha
+            ORDER BY R.HoraInicio;
+        ");
+
+                datos.setearParametro("@idCancha", idCancha);
+                datos.setearParametro("@fecha", fecha);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    var reserva = new Reserva
+                    {
+                        IdReserva = (int)datos.Lector["ReservaID"],
+                        FechaReserva = (DateTime)datos.Lector["Fecha"],
+                        HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
+                        HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+
+                        // Objetos anidados
+                        Cancha = new Cancha
+                        {
+                            Nombre = (string)datos.Lector["Cancha"]
+                        },
+                        Usuario = new Usuario
+                        {
+                            Nombre = (string)datos.Lector["Usuario"]
+                        }
+                    };
+
+                    lista.Add(reserva);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar reservas por cancha y fecha: " + ex.Message);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 
 }

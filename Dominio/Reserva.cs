@@ -15,5 +15,6 @@ namespace Dominio
         public TimeSpan HoraInicio { get; set; }        
         public TimeSpan HoraFin { get; set; }           
         public Promocion Promocion { get; set; }
+
     }
 }

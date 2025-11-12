@@ -55,7 +55,7 @@
     <div class="text-center mt-4">
         <asp:Button ID="btnCambiarEstado" runat="server" Text="Cambiar Estado" CssClass="btn btn-warning me-2" OnClick="btnCambiarEstado_Click" />
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar Cancha" CssClass="btn btn-success me-2" OnClick="btnAgregar_Click" />
-        <a href="ClienteCanchas.aspx" class="btn btn-secondary">Volver</a>
+        <a href="ReservasAdmin.aspx" class="btn btn-secondary">Volver</a>
     </div>
     
     <script type="text/javascript">
