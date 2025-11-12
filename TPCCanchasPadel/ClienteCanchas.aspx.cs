@@ -13,6 +13,7 @@ namespace TPCCanchasPadel
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.RequerirSesion(this);
             if (!IsPostBack)
             {
                 gvCanchas.Visible = false;
@@ -255,26 +256,7 @@ namespace TPCCanchasPadel
 
         private void VerificarRolAdministrador()
         {
-            try
-            {
-                var rolId = Session["RolID"];
-                var usuario = Session["Usuario"];
-
-                if (rolId == null || usuario == null)
-                {
-                    btnEditar.Visible = false;
-                    return;
-                }
-
-                if (Convert.ToInt32(rolId) == 1)
-                    btnEditar.Visible = true;
-                else
-                    btnEditar.Visible = false;
-            }
-            catch
-            {
-                btnEditar.Visible = false;
-            }
+            btnEditar.Visible = Seguridad.EsAdmin(Session);
         }
 
         protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
@@ -283,6 +265,12 @@ namespace TPCCanchasPadel
             Response.Redirect("ClienteCanchas.aspx");
         }
 
+
+        protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
+        {
+            Session["MensajeInfo"] = "Listo, podés realizar una nueva búsqueda.";
+            Response.Redirect(Request.RawUrl);
+        }
 
     }
 }

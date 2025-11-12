@@ -14,11 +14,9 @@ namespace TPCCanchasPadel
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["RolID"] == null || Convert.ToInt32(Session["RolID"]) != 1)
-            {
-                Response.Redirect("Login.aspx");
-                return;
-            }
+            Seguridad.RequerirSesion(this);
+
+            Seguridad.RequerirAdmin(this);
 
             if (!IsPostBack)
             {

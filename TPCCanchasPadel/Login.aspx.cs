@@ -8,34 +8,51 @@ namespace TPCCanchasPadel
     {
         private readonly LoginNegocio _loginNegocio = new LoginNegocio();
 
-        protected void Page_Load(object sender, EventArgs e) {
-            if (!IsPostBack && Request.QueryString["registradoexitosamente"] == "1")
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
             {
-                lblMensaje.CssClass = "text-success d-block mt-3";
-                lblMensaje.Text = "¡Usuario registrado exitosamente! Iniciá sesión.";
+                Seguridad.CerrarSesion(this);
+
+                if (Request.QueryString["registradoexitosamente"] == "1")
+                {
+                    lblMensaje.CssClass = "text-success d-block mt-3";
+                    lblMensaje.Text = "¡Usuario registrado exitosamente! Iniciá sesión.";
+                }
+
+                if (Request.QueryString["exp"] == "1")
+                {
+                    lblMensaje.CssClass = "text-warning d-block mt-3";
+                    lblMensaje.Text = "Tu sesión expiró. Volvé a iniciar sesión.";
+                }
             }
         }
 
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
-            var usuarioInput = (txtUsuario.Text ?? string.Empty);
+            var usuarioInput = (txtUsuario.Text ?? string.Empty).Trim();
             var passwordInput = txtPassword.Text ?? string.Empty;
 
             var user = _loginNegocio.Autenticar(usuarioInput, passwordInput, out string msg);
 
             if (user == null)
             {
+                lblMensaje.CssClass = "text-danger d-block mt-3";
                 lblMensaje.Text = msg; 
                 return;
             }
 
+<<<<<<< HEAD
+            Session["UsuarioID"] = user.UsuarioID;
+            Session["Usuario"] = user.NombreUsuario;
+=======
             Session["Usuario"] = user;
+>>>>>>> ed1536c02f8ebab95c450b470a4adcacc47be411
             Session["RolID"] = user.RolID;
 
-            if (user.RolID == 1)
-                Response.Redirect("Editar.aspx", false);
-            else
-                Response.Redirect("ClienteCanchas.aspx", false);
+            var destino = user.RolID == Seguridad.RolAdmin ? "~/Editar.aspx" : "~/ClienteCanchas.aspx";
+            Response.Redirect(ResolveUrl(destino), false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 }
