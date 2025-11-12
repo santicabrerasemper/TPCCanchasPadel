@@ -259,12 +259,7 @@ namespace TPCCanchasPadel
             btnEditar.Visible = Seguridad.EsAdmin(Session);
         }
 
-        protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
-        {
-            
-            Response.Redirect("ClienteCanchas.aspx");
-        }
-
+       
 
         protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
         {

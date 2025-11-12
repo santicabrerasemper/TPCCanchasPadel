@@ -42,12 +42,10 @@ namespace TPCCanchasPadel
                 return;
             }
 
-<<<<<<< HEAD
+
             Session["UsuarioID"] = user.UsuarioID;
             Session["Usuario"] = user.NombreUsuario;
-=======
             Session["Usuario"] = user;
->>>>>>> ed1536c02f8ebab95c450b470a4adcacc47be411
             Session["RolID"] = user.RolID;
 
             var destino = user.RolID == Seguridad.RolAdmin ? "~/Editar.aspx" : "~/ClienteCanchas.aspx";
