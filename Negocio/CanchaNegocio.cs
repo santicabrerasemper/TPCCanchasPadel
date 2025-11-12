@@ -15,7 +15,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT CanchaID, Nombre FROM Canchas WHERE IdSucursal = @idSucursal");
+                datos.setearConsulta("SELECT CanchaID, Nombre FROM Canchas WHERE SucursalID = @idSucursal");
                 datos.setearParametro("@idSucursal", idSucursal);
                 datos.ejecutarLectura();
 

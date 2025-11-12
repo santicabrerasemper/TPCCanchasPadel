@@ -50,8 +50,8 @@ namespace TPCCanchasPadel
 
             if (!string.IsNullOrEmpty(ddlSucursal.SelectedValue))
             {
-                int idSucursal = int.Parse(ddlSucursal.SelectedValue);
-                var canchas = canchaNegocio.ListarPorSucursal(idSucursal);
+                int SucursalID = int.Parse(ddlSucursal.SelectedValue);
+                var canchas = canchaNegocio.ListarPorSucursal(SucursalID);
 
                 ddlCancha.DataSource = canchas;
                 ddlCancha.DataTextField = "Nombre";
@@ -69,8 +69,8 @@ namespace TPCCanchasPadel
 
             if (!string.IsNullOrEmpty(ddlCancha.SelectedValue))
             {
-                int idCancha = int.Parse(ddlCancha.SelectedValue);
-                var fechas = reservasNegocio.ListarFechasDisponiblesPorCancha(idCancha);
+                int CanchaID = int.Parse(ddlCancha.SelectedValue);
+                var fechas = reservasNegocio.ListarFechasDisponiblesPorCancha(CanchaID);
 
                 ddlFecha.DataSource = fechas;
                 ddlFecha.DataTextField = "Fecha";
