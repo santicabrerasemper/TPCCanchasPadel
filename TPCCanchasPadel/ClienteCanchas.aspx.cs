@@ -14,6 +14,7 @@ namespace TPCCanchasPadel
         protected void Page_Load(object sender, EventArgs e)
         {
             Seguridad.RequerirSesion(this);
+            Seguridad.NoCache(this);
             if (!IsPostBack)
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-AR");

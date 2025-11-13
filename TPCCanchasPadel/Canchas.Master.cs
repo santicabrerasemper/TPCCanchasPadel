@@ -23,13 +23,20 @@ namespace TPCCanchasPadel
 
             bool esAuth = esLogin || esRegistro;
 
+            bool esAdmin = Seguridad.EsAdmin(Session);
+
             var haySesion = Seguridad.SesionActiva(Session);
 
             phAnonimo.Visible = !haySesion && !esAuth;
             phAutenticado.Visible = haySesion;
             liInicio.Visible = !haySesion;
 
-            lnkMarca.NavigateUrl = ResolveUrl(haySesion ? "~/ClienteCanchas.aspx" : "~/Home.aspx");
+            if (!haySesion)
+                lnkMarca.NavigateUrl = ResolveUrl("~/Home.aspx");
+            else if (esAdmin)
+                lnkMarca.NavigateUrl = ResolveUrl("~/ReservasAdmin.aspx");
+            else
+                lnkMarca.NavigateUrl = ResolveUrl("~/ClienteCanchas.aspx");
         }
     }
 }

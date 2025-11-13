@@ -61,7 +61,16 @@
   <script>
       (() => {
           'use strict';
-          const formulario = document.getElementById('form1'); // el form viene de la Master
+
+          if (window.history && history.pushState) {
+              history.replaceState(null, '', location.href);
+              history.pushState(null, '', location.href);
+              window.addEventListener('popstate', function () {
+                  history.pushState(null, '', location.href);
+              });
+          }
+
+          const formulario = document.getElementById('form1'); 
           if (formulario) {
               formulario.setAttribute('novalidate', 'novalidate');
               formulario.classList.add('needs-validation');

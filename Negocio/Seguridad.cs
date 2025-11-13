@@ -21,18 +21,22 @@ namespace Negocio
 
         public static void RequerirSesion(Page page)
         {
-            if (!SesionActiva(page.Session))
+            if (page == null || page.Session == null || page.Session["UsuarioID"] == null)
             {
-                page.Response.Redirect(page.ResolveUrl("~/Login.aspx"), false);
+                var url = (page != null)
+                    ? page.ResolveUrl("~/Login.aspx?exp=1")
+                    : "~/Login.aspx?exp=1";
+                HttpContext.Current.Response.Redirect(url, endResponse: false);
                 HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
         }
+
 
         public static void RequerirAdmin(Page page)
         {
             if (!SesionActiva(page.Session) || !EsAdmin(page.Session))
             {
-                page.Response.Redirect(page.ResolveUrl("~/Home.aspx"), false);
+                page.Response.Redirect(page.ResolveUrl("~/Login.aspx"), false);
                 HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
         }
@@ -41,6 +45,13 @@ namespace Negocio
         {
             page.Session.Clear();
             page.Session.Abandon();
+        }
+
+        public static void NoCache(Page page)
+        {
+            page.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            page.Response.Cache.SetNoStore();
+            page.Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
         }
     }
 }

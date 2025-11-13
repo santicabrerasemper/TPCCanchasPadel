@@ -15,8 +15,8 @@ namespace TPCCanchasPadel
         protected void Page_Load(object sender, EventArgs e)
         {
             Seguridad.RequerirSesion(this);
-
             Seguridad.RequerirAdmin(this);
+            Seguridad.NoCache(this);
 
             if (!IsPostBack)
             {
