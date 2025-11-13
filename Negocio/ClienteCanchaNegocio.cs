@@ -20,41 +20,44 @@ namespace Negocio
             try
             {
                 string consulta = @"
-                SELECT 
-                    c.CanchaID,
-                    c.Nombre,
-                    c.SucursalID,
-                    c.EstadoID,
-                    s.Nombre AS NombreSucursal,
-                    l.Nombre AS NombreLocalidad
-                FROM Canchas c
-                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-                INNER JOIN Localidades l ON s.LocalidadID = l.LocalidadID
-                WHERE c.SucursalID = @SucursalID
-                  AND NOT EXISTS (
-                      SELECT 1 FROM Reservas r
-                      WHERE r.CanchaID = c.CanchaID
-                        AND r.Fecha = @Fecha
-                        AND (@HoraInicio < r.HoraFin AND @HoraFin > r.HoraInicio)
-                  )
-                ORDER BY c.Nombre;";
+            SELECT 
+                c.CanchaID,
+                c.Nombre,
+                c.SucursalID,
+                c.EstadoID,
+                s.Nombre AS NombreSucursal,
+                l.Nombre AS NombreLocalidad
+            FROM Canchas c
+            INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+            INNER JOIN Localidades l ON s.LocalidadID = l.LocalidadID
+            WHERE c.SucursalID = @SucursalID
+              AND c.CanchaID NOT IN (
+                  SELECT r.CanchaID 
+                  FROM Reservas r
+                  WHERE r.Fecha = @Fecha
+                    AND (
+                        (@HoraInicio < r.HoraFin AND @HoraFin > r.HoraInicio)
+                    )
+              )
+            ORDER BY c.Nombre";
 
                 datos.setearConsulta(consulta);
-                datos.setearParametro("@SucursalID", sucursalId);
                 datos.setearParametro("@Fecha", fecha);
                 datos.setearParametro("@HoraInicio", horaInicio);
                 datos.setearParametro("@HoraFin", horaFin);
+                datos.setearParametro("@SucursalID", sucursalId);
                 datos.ejecutarLectura();
 
-                int activoId = 1;
+                int activoId = 1; 
                 try
                 {
-                    AccesoDatos aux = new AccesoDatos();
-                    aux.setearConsulta("SELECT EstadoID FROM Estados WHERE Nombre = 'Activo'");
-                    aux.ejecutarLectura();
-                    if (aux.Lector.Read())
-                        activoId = Convert.ToInt32(aux.Lector["EstadoID"]);
-                    aux.cerrarConexion();
+
+                    AccesoDatos d2 = new AccesoDatos();
+                    d2.setearConsulta("SELECT EstadoID FROM Estados WHERE Nombre = 'Activo'");
+                    d2.ejecutarLectura();
+                    if (d2.Lector.Read())
+                        activoId = Convert.ToInt32(d2.Lector["EstadoID"]);
+                    d2.cerrarConexion();
                 }
                 catch { }
 
@@ -62,16 +65,16 @@ namespace Negocio
                 {
                     var cancha = new Cancha
                     {
-                        CanchaID = Convert.ToInt32(datos.Lector["CanchaID"]),
-                        Nombre = datos.Lector["Nombre"].ToString(),
-                        SucursalID = Convert.ToInt32(datos.Lector["SucursalID"]),
-                        EstadoID = Convert.ToInt32(datos.Lector["EstadoID"]),
-                        NombreSucursal = datos.Lector["NombreSucursal"].ToString(),
-                        NombreLocalidad = datos.Lector["NombreLocalidad"].ToString(),
-                        Activa = (Convert.ToInt32(datos.Lector["EstadoID"]) == activoId)
+                        CanchaID = datos.Lector["CanchaID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["CanchaID"]) : 0,
+                        Nombre = datos.Lector["Nombre"] != DBNull.Value ? datos.Lector["Nombre"].ToString() : string.Empty,
+                        SucursalID = datos.Lector["SucursalID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["SucursalID"]) : 0,
+                        EstadoID = datos.Lector["EstadoID"] != DBNull.Value ? Convert.ToInt32(datos.Lector["EstadoID"]) : 0,
+                        NombreSucursal = datos.Lector["NombreSucursal"] != DBNull.Value ? datos.Lector["NombreSucursal"].ToString() : string.Empty,
+                        NombreLocalidad = datos.Lector["NombreLocalidad"] != DBNull.Value ? datos.Lector["NombreLocalidad"].ToString() : string.Empty,
                     };
 
-                    
+                    cancha.Activa = (cancha.EstadoID == activoId);
+
                     decimal precioHora = 6000m;
                     double duracion = (horaFin - horaInicio).TotalHours;
                     cancha.TotalEstimado = precioHora * (decimal)duracion;
@@ -90,6 +93,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
 
 
 

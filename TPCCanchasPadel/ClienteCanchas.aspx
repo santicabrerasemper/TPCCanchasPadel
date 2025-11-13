@@ -126,25 +126,25 @@
     AutoGenerateColumns="false"
     OnRowCommand="grillaCanchas_ComandoReserva" Visible="false">
           <Columns>
-            <asp:BoundField DataField="CanchaID" HeaderText="ID" Visible="false" />
-
-            <asp:BoundField DataField="Nombre" HeaderText="Cancha" />
-
-            <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
-
-            <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
-
-            <asp:BoundField DataField="TotalEstimado" HeaderText="Total estimado" DataFormatString="{0:C}" />
-
-            <asp:TemplateField HeaderText="Acción">
-              <ItemTemplate>
-                <asp:Button ID="btnReservar" runat="server" Text="Reservar"
-                  CommandName="Reservar"
-                  CommandArgument='<%# Eval("CanchaID") %>'
-                  CssClass="btn btn-success btn-sm" />
-              </ItemTemplate>
-            </asp:TemplateField>
+              <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
+          
+              <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
+          
+              <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
+          
+              <asp:BoundField DataField="TotalEstimado" HeaderText="Total Estimado" DataFormatString="{0:C}" />
+          
+              <asp:TemplateField HeaderText="Acción">
+                  <ItemTemplate>
+                      <asp:Button ID="btnReservar" runat="server" Text="Reservar"
+                          CommandName="Reservar"
+                          CommandArgument='<%# Eval("CanchaID") %>'
+                          CssClass="btn btn-success btn-sm"
+                          Visible='<%# Convert.ToBoolean(Eval("Activa")) %>' />
+                  </ItemTemplate>
+              </asp:TemplateField>
           </Columns>
+
         </asp:GridView>
       </div>
 
