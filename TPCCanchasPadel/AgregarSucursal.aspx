@@ -56,6 +56,10 @@
               <asp:Button ID="btnConfirmar" runat="server" CssClass="btn btn-success w-100" Text="Confirmar"  OnClick="btnConfirmar_Click" />
         
               <asp:Button ID="btnCancelar" runat="server" CssClass="btn btn-danger w-100" Text="Cancelar"  OnClick="btnCancelar_Click" CausesValidation="false"/>
+                <asp:Button ID="btnVolver" runat="server" 
+    CssClass="btn btn-primary w-100 mt-2" 
+    Text="Volver al Panel Admin" 
+    OnClick="btnVolver_Click" />
         
             </div>
           </div>

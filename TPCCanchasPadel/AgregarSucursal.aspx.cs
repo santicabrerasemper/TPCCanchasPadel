@@ -32,42 +32,32 @@ namespace TPCCanchasPadel
 
             try
             {
-                // 1️⃣ Obtener próximo LocalidadID
-                datos.setearConsulta("SELECT ISNULL(MAX(LocalidadID), 0) + 1 AS NextId FROM Localidades");
-                datos.ejecutarLectura();
-                datos.Lector.Read();
-                int nuevoLocalidadId = Convert.ToInt32(datos.Lector["NextId"]);
-                datos.cerrarConexion();
-
-                // 2️⃣ Insertar nueva Localidad
+                // 1️⃣ Insertar nueva Localidad (IDENTITY genera el ID)
                 datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO Localidades (LocalidadID, Nombre) VALUES (@id, @nombre)");
-                datos.setearParametro("@id", nuevoLocalidadId);
+                datos.setearConsulta("INSERT INTO Localidades (Nombre) OUTPUT INSERTED.LocalidadID VALUES (@nombre)");
                 datos.setearParametro("@nombre", txtLocalidad.Text);
-                datos.ejecutarAccion();
-                datos.cerrarConexion();
-
-                // 3️⃣ Obtener próximo SucursalID
-                datos = new AccesoDatos();
-                datos.setearConsulta("SELECT ISNULL(MAX(SucursalID), 0) + 1 AS NextId FROM Sucursales");
                 datos.ejecutarLectura();
                 datos.Lector.Read();
-                int nuevaSucursalId = Convert.ToInt32(datos.Lector["NextId"]);
+
+                int nuevoLocalidadId = Convert.ToInt32(datos.Lector[0]);
                 datos.cerrarConexion();
 
-                // 4️⃣ Insertar nueva Sucursal
+
+                // 2️⃣ Insertar nueva Sucursal (IDENTITY genera el ID)
                 datos = new AccesoDatos();
                 datos.setearConsulta(@"
-            INSERT INTO Sucursales (SucursalID, LocalidadID, Nombre, FotoUrl)
-            VALUES (@id, @loc, @nom, @foto)
-        ");
+                    INSERT INTO Sucursales (LocalidadID, Nombre, FotoUrl)
+                    OUTPUT INSERTED.SucursalID
+                    VALUES (@loc, @nom, @foto)");
 
-                datos.setearParametro("@id", nuevaSucursalId);
                 datos.setearParametro("@loc", nuevoLocalidadId);
                 datos.setearParametro("@nom", txtNombre.Text);
                 datos.setearParametro("@foto", txtFoto.Text);
 
-                datos.ejecutarAccion();
+                datos.ejecutarLectura();
+                datos.Lector.Read();
+
+                int nuevaSucursalId = Convert.ToInt32(datos.Lector[0]);
                 datos.cerrarConexion();
 
                 MostrarMensaje("Sucursal creada con éxito 🎉", "success");
@@ -92,7 +82,7 @@ namespace TPCCanchasPadel
                 case "success":
                     color = "border-success text-success bg-light";
                     icono = "✅";
-                    titulo = "¡Reserva confirmada!";
+                    titulo = "¡Sucursal agregada!";
                     break;
                 case "warning":
                     color = "border-warning text-warning bg-light";
@@ -124,6 +114,11 @@ namespace TPCCanchasPadel
                     to {{ opacity: 1; transform: translateY(0); }}
                 }}
             </style>";
+        }
+
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ReservasAdmin.aspx");
         }
 
     }
