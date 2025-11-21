@@ -59,17 +59,17 @@
 
           <div class="col-md-3">
             <label for="txtFecha" class="form-label">Fecha</label>
-            <asp:TextBox ID="txtFecha" runat="server" CssClass="form-control" TextMode="Date" required="required"></asp:TextBox>
+            <asp:TextBox ID="txtFecha" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
           </div>
 
           <div class="col-md-3">
             <label for="txtHoraInicio" class="form-label">Hora inicio</label>
-            <asp:TextBox ID="txtHoraInicio" runat="server" CssClass="form-control" TextMode="Time" required="required"></asp:TextBox>
+            <asp:TextBox ID="txtHoraInicio" runat="server" CssClass="form-control" TextMode="Time"></asp:TextBox>
           </div>
 
           <div class="col-md-3">
             <label for="txtHoraFin" class="form-label">Hora fin</label>
-            <asp:TextBox ID="txtHoraFin" runat="server" CssClass="form-control" TextMode="Time" required="required"></asp:TextBox>
+            <asp:TextBox ID="txtHoraFin" runat="server" CssClass="form-control" TextMode="Time"></asp:TextBox>
           </div>
 
           <div class="col-12 col-md-3">

@@ -2,6 +2,8 @@
 using Dominio;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Web.Configuration;
 
 namespace Negocio
 {
@@ -43,6 +45,53 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void AgregarSucursalCompleta(string nombreSucursal, string nombreLocalidad, string foto)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT ISNULL(MAX(LocalidadID), 0) + 1 FROM Localidades");
+                datos.ejecutarLectura();
+                datos.Lector.Read();
+                int nuevoLocalidadId = (int)datos.Lector[0];
+                datos.cerrarConexion();
+
+                datos = new AccesoDatos();
+                datos.setearConsulta("INSERT INTO Localidades (LocalidadID, Nombre) VALUES (@id, @nombre)");
+                datos.setearParametro("@id", nuevoLocalidadId);
+                datos.setearParametro("@nombre", nombreLocalidad);
+                datos.ejecutarAccion();
+                datos.cerrarConexion();
+
+                datos = new AccesoDatos();
+                datos.setearConsulta("SELECT ISNULL(MAX(SucursalID), 0) + 1 FROM Sucursales");
+                datos.ejecutarLectura();
+                datos.Lector.Read();
+                int nuevoSucursalId = (int)datos.Lector[0];
+                datos.cerrarConexion();
+
+                datos = new AccesoDatos();
+                datos.setearConsulta(
+                    @"INSERT INTO Sucursales (SucursalID, Nombre, LocalidadID, FotoUrl)
+              VALUES (@id, @nombre, @loc, @foto)");
+                datos.setearParametro("@id", nuevoSucursalId);
+                datos.setearParametro("@nombre", nombreSucursal);
+                datos.setearParametro("@loc", nuevoLocalidadId);
+                datos.setearParametro("@foto", foto);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }
 

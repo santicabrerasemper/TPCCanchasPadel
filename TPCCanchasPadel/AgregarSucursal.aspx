@@ -40,27 +40,17 @@
         
               <div class="mb-3">
                 <label for="txtNombre" class="form-label">Nombre</label>
-                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" MaxLength="20" minlength="4" required="required" inputmode="text" spellcheck="false" placeholder="ej: Sucursal Nueva" />
+                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" MaxLength="20" minlength="4" inputmode="text" spellcheck="false" placeholder="ej: Sucursal Nueva" />
               </div>
         
               <div class="mb-3">
                 <label for="txtLocalidad" class="form-label">Localidad</label>
-                <asp:TextBox ID="txtLocalidad" runat="server" CssClass="form-control" MaxLength="20" minlength="4" required="required" inputmode="text" spellcheck="false" placeholder="ej: Palermo" />
+                <asp:TextBox ID="txtLocalidad" runat="server" CssClass="form-control" MaxLength="20" minlength="4" inputmode="text" spellcheck="false" placeholder="ej: Palermo" />
               </div>
            
               <div class="mb-3">
                 <label for="txtFoto" class="form-label">Foto</label>
-                <asp:TextBox ID="txtFoto" runat="server" CssClass="form-control" required="required" placeholder="Link Foto" />
-              </div>
-        
-              <div class="mb-3">
-                <label for="txtDireccion" class="form-label">Direccion</label>
-                <asp:TextBox ID="txtDireccion" runat="server" CssClass="form-control" required="required" placeholder="Link Direccion" />
-              </div>
-        
-              <div class="mb-3">
-                <label for="txtDescripcion" class="form-label">Descripcion</label>
-                <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" MaxLength="100" minlength="20" required="required" placeholder="Pequeña descripcion del lugar" />
+                <asp:TextBox ID="txtFoto" runat="server" CssClass="form-control" placeholder="Link Foto" />
               </div>
         
               <asp:Button ID="btnConfirmar" runat="server" CssClass="btn btn-success w-100" Text="Confirmar"  OnClick="btnConfirmar_Click" />
@@ -70,6 +60,7 @@
             </div>
           </div>
         </section>
+        <asp:Label ID="lblMensaje" runat="server"></asp:Label>
     </form>
 
     <script src="Scripts/bootstrap.bundle.js"></script>
@@ -81,8 +72,6 @@
             const usuario = document.getElementById('<%= txtNombre.ClientID %>');
             const nombreEl = document.getElementById('<%= txtLocalidad.ClientID %>');
             const apellidoEl = document.getElementById('<%= txtFoto.ClientID %>');
-            const contrasena= document.getElementById('<%= txtDireccion.ClientID %>');
-            const confirmar = document.getElementById('<%= txtDescripcion.ClientID %>');
     
         })();
     </script>
