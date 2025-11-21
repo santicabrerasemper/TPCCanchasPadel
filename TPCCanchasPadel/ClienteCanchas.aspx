@@ -76,6 +76,10 @@
             <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-success w-100" OnClick="btnBuscar_Click"/>
           </div>
 
+          <div class="col-12 col-md-3">
+              <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-info w-100" OnClick="btnVolver_Click" CausesValidation="false"/>
+          </div>
+
           <div class="col-md-3 d-flex align-items-end">
               <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda" CssClass="btn btn-secondary w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
           </div>

@@ -124,6 +124,11 @@ namespace TPCCanchasPadel
             Response.Redirect("Editar.aspx");
         }
 
+        protected void btnAgregarReserva_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ClienteCanchas.aspx");
+        }
+
         private void CargarReservasFiltradas()
         {
             int tempInt;

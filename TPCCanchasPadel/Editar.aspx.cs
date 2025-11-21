@@ -32,7 +32,6 @@ namespace TPCCanchasPadel
                 string nombreSucursal = datos[0];
                 string localidadNombre = datos[1];
 
-                AgregarSucursal(nombreSucursal, localidadNombre);
             }
         }
 
@@ -151,27 +150,9 @@ namespace TPCCanchasPadel
             CargarCanchas();
         }
 
-        private void AgregarSucursal(string nombreSucursal, string localidadNombre)
+        protected void btnAgregarSucursal_OnClick(object sender, EventArgs e)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-
-                SqlCommand cmdLoc = new SqlCommand(
-                    "INSERT INTO Localidades (Nombre) VALUES (@Nombre); SELECT SCOPE_IDENTITY();", con);
-                cmdLoc.Parameters.AddWithValue("@Nombre", localidadNombre);
-                int nuevoLocalidadId = Convert.ToInt32(cmdLoc.ExecuteScalar());
-
-                SqlCommand cmdSuc = new SqlCommand(
-                    "INSERT INTO Sucursales (Nombre, LocalidadID) VALUES (@Nombre, @LocalidadID)", con);
-                cmdSuc.Parameters.AddWithValue("@Nombre", nombreSucursal);
-                cmdSuc.Parameters.AddWithValue("@LocalidadID", nuevoLocalidadId);
-                cmdSuc.ExecuteNonQuery();
-            }
-
-            CargarSucursales();
-
-            ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Sucursal agregada correctamente.');", true);
+            Response.Redirect("AgregarSucursal.aspx");
         }
 
         protected void btnNuevaSucursal_Click(object sender, EventArgs e)

@@ -25,14 +25,34 @@ namespace TPCCanchasPadel
                 btnNuevaBusqueda.Visible = false;
                 CargarSucursales();
 
-                
+                Usuario loged = (Usuario)Session["Usuario"];
+
+                if(loged.RolID == 01)
+                {
+                    txtFecha.Attributes.Remove("required");
+                    txtHoraInicio.Attributes.Remove("required");
+                    txtHoraFin.Attributes.Remove("required");
+                    ddlSucursal.Attributes.Remove("required");
+                }
+
+
                 if (Session["MensajeInfo"] != null)
                 {
                     MostrarMensaje(Session["MensajeInfo"].ToString(), "info");
                     Session["MensajeInfo"] = null;
                 }
             }
-            
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+            if (usuario.RolID == 01)
+            {
+                btnVolver.Visible = true;
+            }
+            else
+            {
+                btnVolver.Visible = false;
+            }
+
         }
 
 
@@ -94,7 +114,10 @@ namespace TPCCanchasPadel
             imgSucursal.Visible = true;
         }
 
-
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ReservasAdmin.aspx");
+        }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {

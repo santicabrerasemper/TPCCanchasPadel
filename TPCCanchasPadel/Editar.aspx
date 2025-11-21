@@ -24,7 +24,7 @@
             </div>
         </div>
     
-        <asp:Button ID="btnNuevaSucursal" runat="server" Text="Agregar Nueva Sucursal" CssClass="btn btn-success" OnClientClick="agregarSucursal(); return false;" />
+        <asp:Button ID="btnNuevaSucursal" runat="server" Text="Agregar Nueva Sucursal" CssClass="btn btn-success" OnClick="btnAgregarSucursal_OnClick" />
 
 
     </div>
