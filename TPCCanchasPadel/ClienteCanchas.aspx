@@ -40,10 +40,22 @@
         <h2 class="h4 fw-bold mb-3">Buscador</h2>
 
         <div class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label for="ddlSucursal" class="form-label">Sucursal</label>
-            <asp:DropDownList ID="ddlSucursal" runat="server" CssClass="form-select"></asp:DropDownList>
-          </div>
+         <div class="col-md-3">
+    <label for="ddlSucursal" class="form-label">Sucursal</label>
+    <asp:DropDownList ID="ddlSucursal" runat="server" 
+        CssClass="form-select"
+        AutoPostBack="true"
+        OnSelectedIndexChanged="ddlSucursal_SelectedIndexChanged">
+    </asp:DropDownList>
+</div>
+
+
+<div class="col-12 mt-3">
+    <asp:Image ID="imgSucursal" runat="server" 
+        Visible="false" 
+        Width="350px" 
+        CssClass="img-fluid rounded shadow-sm border" />
+</div>
 
           <div class="col-md-3">
             <label for="txtFecha" class="form-label">Fecha</label>
@@ -77,76 +89,79 @@
         <asp:Label ID="lblMensaje" runat="server" CssClass="fw-semibold d-block mt-3"></asp:Label>
       </div>
 
-        <div class="canchas-card mb-4">
-  <h2 class="h5 fw-bold mb-3">Mis Reservas</h2>
+    
+<div class="canchas-card mb-4">
+    <h3 class="h5 fw-bold mb-3">Resultados</h3>
 
-  <asp:Button ID="btnMisReservas" runat="server" 
-    Text="Ver mis reservas" 
-    CssClass="btn btn-outline-primary w-100"
-    OnClick="btnMisReservas_Click"
-    CausesValidation="false"
-    UseSubmitBehavior="false" />
+    <asp:GridView ID="gvCanchas" runat="server"
+        CssClass="table table-striped table-hover text-center mb-0"
+        AutoGenerateColumns="false"
+        OnRowCommand="grillaCanchas_ComandoReserva"
+        Visible="false">
+        <Columns>
+            <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
+            <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
+            <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
+            <asp:BoundField DataField="TotalEstimado" HeaderText="Total Estimado" DataFormatString="{0:C}" />
 
-  <asp:Label ID="lblMisReservasMsg" runat="server" 
-      CssClass="text-danger fw-semibold d-block mb-3"></asp:Label>
+            <asp:TemplateField HeaderText="Acción">
+                <ItemTemplate>
+                    <asp:Button ID="btnReservar" runat="server" 
+                        Text="Reservar"
+                        CommandName="Reservar"
+                        CommandArgument='<%# Eval("CanchaID") %>'
+                        CssClass="btn btn-success btn-sm"
+                        Visible='<%# Convert.ToBoolean(Eval("Activa")) %>' />
+                </ItemTemplate>
+            </asp:TemplateField>
+        </Columns>
+    </asp:GridView>
+</div>
 
-<asp:GridView ID="gvMisReservas" runat="server"
-    AutoGenerateColumns="False" 
-    CssClass="table table-striped text-center"
-    Visible="false">
-    <Columns>
-        <asp:BoundField DataField="FechaReserva" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
 
-        <asp:TemplateField HeaderText="Inicio">
-            <ItemTemplate>
-                <%# ((TimeSpan)Eval("HoraInicio")).ToString(@"hh\:mm") %>
-            </ItemTemplate>
-        </asp:TemplateField>
 
-        <asp:TemplateField HeaderText="Fin">
-            <ItemTemplate>
-                <%# ((TimeSpan)Eval("HoraFin")).ToString(@"hh\:mm") %>
-            </ItemTemplate>
-        </asp:TemplateField>
 
-        <asp:BoundField DataField="Cancha.Nombre" HeaderText="Cancha" />
-        <asp:BoundField DataField="Estado.Nombre" HeaderText="Estado" />
-        <asp:BoundField DataField="Sucursal.Nombre" HeaderText="Sucursal" />
-    </Columns>
-</asp:GridView>
+<div class="canchas-card mb-4">
+    <h2 class="h5 fw-bold mb-3">Mis Reservas</h2>
 
-<asp:Label ID="lblCantidadReservas" runat="server" CssClass="fw-semibold mt-2 d-block text-end"></asp:Label>
+    <asp:Button ID="btnMisReservas" runat="server" 
+        Text="Ver mis reservas" 
+        CssClass="btn btn-outline-primary w-100"
+        OnClick="btnMisReservas_Click"
+        CausesValidation="false"
+        UseSubmitBehavior="false" />
 
-   
-      <div class="canchas-card">
-        <h3 class="h5 fw-bold mb-3">Resultados</h3>
+    <asp:Label ID="lblMisReservasMsg" runat="server" 
+        CssClass="text-danger fw-semibold d-block mb-3"></asp:Label>
 
-        <asp:GridView ID="gvCanchas" runat="server"
-    CssClass="table table-striped table-hover text-center mb-0"
-    AutoGenerateColumns="false"
-    OnRowCommand="grillaCanchas_ComandoReserva" Visible="false">
-          <Columns>
-              <asp:BoundField DataField="Nombre" HeaderText="Nombre de Cancha" />
-          
-              <asp:BoundField DataField="NombreSucursal" HeaderText="Sucursal" />
-          
-              <asp:BoundField DataField="NombreLocalidad" HeaderText="Localidad" />
-          
-              <asp:BoundField DataField="TotalEstimado" HeaderText="Total Estimado" DataFormatString="{0:C}" />
-          
-              <asp:TemplateField HeaderText="Acción">
-                  <ItemTemplate>
-                      <asp:Button ID="btnReservar" runat="server" Text="Reservar"
-                          CommandName="Reservar"
-                          CommandArgument='<%# Eval("CanchaID") %>'
-                          CssClass="btn btn-success btn-sm"
-                          Visible='<%# Convert.ToBoolean(Eval("Activa")) %>' />
-                  </ItemTemplate>
-              </asp:TemplateField>
-          </Columns>
+    <asp:GridView ID="gvMisReservas" runat="server"
+        AutoGenerateColumns="False" 
+        CssClass="table table-striped text-center"
+        Visible="false">
+        <Columns>
+            <asp:BoundField DataField="FechaReserva" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
 
-        </asp:GridView>
-      </div>
+            <asp:TemplateField HeaderText="Inicio">
+                <ItemTemplate>
+                    <%# ((TimeSpan)Eval("HoraInicio")).ToString(@"hh\:mm") %>
+                </ItemTemplate>
+            </asp:TemplateField>
+
+            <asp:TemplateField HeaderText="Fin">
+                <ItemTemplate>
+                    <%# ((TimeSpan)Eval("HoraFin")).ToString(@"hh\:mm") %>
+                </ItemTemplate>
+            </asp:TemplateField>
+
+            <asp:BoundField DataField="Cancha.Nombre" HeaderText="Cancha" />
+            <asp:BoundField DataField="Estado.Nombre" HeaderText="Estado" />
+            <asp:BoundField DataField="Sucursal.Nombre" HeaderText="Sucursal" />
+        </Columns>
+    </asp:GridView>
+
+    <asp:Label ID="lblCantidadReservas" runat="server" 
+        CssClass="fw-semibold mt-2 d-block text-end"></asp:Label>
+</div>
 
     </div>
   </section>

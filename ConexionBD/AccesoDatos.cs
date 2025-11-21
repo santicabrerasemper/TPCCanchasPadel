@@ -16,7 +16,7 @@ namespace ConexionBD
 
         public AccesoDatos()
         {
-            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=Canchas_BD_TPC; integrated security=true");
+            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=Canchas_BD_TPC_Nuevo; integrated security=true");
             comando = new SqlCommand();
         }
 

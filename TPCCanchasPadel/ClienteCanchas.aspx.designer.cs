@@ -24,6 +24,15 @@ namespace TPCCanchasPadel
         protected global::System.Web.UI.WebControls.DropDownList ddlSucursal;
 
         /// <summary>
+        /// Control imgSucursal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgSucursal;
+
+        /// <summary>
         /// Control txtFecha.
         /// </summary>
         /// <remarks>
@@ -78,6 +87,15 @@ namespace TPCCanchasPadel
         protected global::System.Web.UI.WebControls.Label lblMensaje;
 
         /// <summary>
+        /// Control gvCanchas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvCanchas;
+
+        /// <summary>
         /// Control btnMisReservas.
         /// </summary>
         /// <remarks>
@@ -112,14 +130,5 @@ namespace TPCCanchasPadel
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblCantidadReservas;
-
-        /// <summary>
-        /// Control gvCanchas.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvCanchas;
     }
 }

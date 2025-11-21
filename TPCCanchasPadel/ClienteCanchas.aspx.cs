@@ -63,6 +63,39 @@ namespace TPCCanchasPadel
         }
 
 
+        protected void ddlSucursal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            if (ddlSucursal.SelectedIndex <= 0)
+            {
+                imgSucursal.Visible = false;
+                return;
+            }
+
+            int id = int.Parse(ddlSucursal.SelectedValue);
+
+            
+            SucursalNegocio negocio = new SucursalNegocio();
+            Sucursal suc = negocio.ListarSucursales()
+                                  .Find(x => x.SucursalID == id);
+
+            
+            string imagenDefault = "https://via.placeholder.com/350x200.png?text=Sin+Imagen";
+
+            if (suc != null && !string.IsNullOrEmpty(suc.FotoUrl))
+            {
+                imgSucursal.ImageUrl = suc.FotoUrl;
+            }
+            else
+            {
+                imgSucursal.ImageUrl = imagenDefault;
+            }
+
+            imgSucursal.Visible = true;
+        }
+
+
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try

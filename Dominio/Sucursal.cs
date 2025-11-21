@@ -11,6 +11,6 @@ namespace Dominio
         public int SucursalID { get; set; }         
         public int LocalidadID { get; set; }       
         public string Nombre { get; set; }
-
+        public string FotoUrl { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT SucursalID, Nombre FROM Sucursales");
+                datos.setearConsulta("SELECT SucursalID, Nombre, FotoUrl FROM Sucursales");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -22,7 +22,12 @@ namespace Negocio
                     Sucursal suc = new Sucursal
                     {
                         SucursalID = (int)datos.Lector["SucursalID"],
-                        Nombre = (string)datos.Lector["Nombre"]
+                        Nombre = (string)datos.Lector["Nombre"],
+                        FotoUrl = datos.Lector["FotoUrl"] != DBNull.Value
+                ? (string)datos.Lector["FotoUrl"]
+                : null
+
+
                     };
                     lista.Add(suc);
                 }
