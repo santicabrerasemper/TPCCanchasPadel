@@ -87,6 +87,24 @@ namespace TPCCanchasPadel
         protected global::System.Web.UI.WebControls.Button btnNuevaBusqueda;
 
         /// <summary>
+        /// Control lblPromo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPromo;
+
+        /// <summary>
+        /// Control hidPromoId.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hidPromoId;
+
+        /// <summary>
         /// Control lblMensaje.
         /// </summary>
         /// <remarks>

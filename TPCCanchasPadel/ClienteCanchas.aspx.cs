@@ -3,6 +3,7 @@ using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -52,7 +53,10 @@ namespace TPCCanchasPadel
             {
                 btnVolver.Visible = false;
             }
-
+            lblPromo.Visible = false;
+            lblPromo.Text = string.Empty;
+            hidPromoId.Value = string.Empty;
+            ViewState.Remove("PromoPct");
         }
 
 
@@ -112,6 +116,22 @@ namespace TPCCanchasPadel
             }
 
             imgSucursal.Visible = true;
+
+            var fechaSeleccionada = DateTime.Today;
+            if (DateTime.TryParse(txtFecha.Text, out var f)) fechaSeleccionada = f;
+
+            if (ddlSucursal.SelectedIndex > 0)
+            {
+                int sucursalId = int.Parse(ddlSucursal.SelectedValue);
+                CargarPromoVigente(sucursalId, fechaSeleccionada);
+            }
+            else
+            {
+                lblPromo.Visible = false;
+                lblPromo.Text = string.Empty;
+                hidPromoId.Value = string.Empty;
+                ViewState.Remove("PromoPct");
+            }
         }
 
         protected void btnVolver_Click(object sender, EventArgs e)
@@ -137,6 +157,8 @@ namespace TPCCanchasPadel
                 TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
                 TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
                 int sucursalId = int.Parse(ddlSucursal.SelectedValue);
+
+                CargarPromoVigente(sucursalId, fecha);
 
                 ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
 
@@ -374,5 +396,54 @@ namespace TPCCanchasPadel
             }
         }
 
+        private void CargarPromoVigente(int sucursalId, DateTime fecha)
+        {
+ 
+            lblPromo.Visible = false;
+            lblPromo.Text = string.Empty;
+            hidPromoId.Value = string.Empty;
+
+            var datos = new AccesoDatos();
+            try
+            {        
+                string f = fecha.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                datos.setearConsulta($@"
+            SELECT TOP 1 PromocionID, Descripcion, Descuento
+            FROM Promociones
+            WHERE SucursalID = {sucursalId}
+              AND EstadoID = 1
+              AND '{f}' BETWEEN FechaInicio AND FechaFin
+            ORDER BY PromocionID DESC");
+
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int promoId = Convert.ToInt32(datos.Lector["PromocionID"]);
+                    string desc = Convert.ToString(datos.Lector["Descripcion"]);
+                    int descuentoPct = Convert.ToInt32(datos.Lector["Descuento"]);
+
+                    hidPromoId.Value = promoId.ToString();
+                    lblPromo.Text = $"🎉 <b>Promo vigente:</b> {desc} – <b>{descuentoPct}% OFF</b>";
+                    lblPromo.Visible = true;
+
+                    ViewState["PromoPct"] = descuentoPct;
+                }
+                else
+                {
+                    ViewState.Remove("PromoPct");
+                }
+            }
+            catch (Exception ex)
+            {
+   
+                ViewState.Remove("PromoPct");
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
