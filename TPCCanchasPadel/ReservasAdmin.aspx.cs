@@ -25,6 +25,7 @@ namespace TPCCanchasPadel
         private void CargarReservas()
         {
             var lista = reservasNegocio.ListarReservas();
+
             gvCanchas.DataSource = lista;
             gvCanchas.DataBind();
         }
@@ -142,6 +143,58 @@ namespace TPCCanchasPadel
             gvCanchas.DataSource = reservas;
             gvCanchas.DataBind();
         }
+
+
+        protected void btnConfirmarReserva_Click(object sender, EventArgs e)
+        {
+            List<int> reservasConfirmadas = new List<int>();
+
+            foreach (GridViewRow row in gvCanchas.Rows)
+            {
+                CheckBox chk = row.FindControl("chkSelect") as CheckBox;
+                HiddenField hdn = row.FindControl("hdnId") as HiddenField;
+
+                if (chk != null && chk.Checked && hdn != null)
+                {
+                    int reservaId = int.Parse(hdn.Value);
+
+                    
+                    reservasNegocio.ConfirmarReserva(reservaId);
+
+                   
+                    reservasConfirmadas.Add(reservaId);
+                }
+            }
+
+            
+            if (reservasConfirmadas.Count > 0)
+            {
+                Session["UltimasReservasConfirmadas"] = reservasConfirmadas;
+            }
+
+            
+            CargarReservas();
+        }
+
+        protected void gvCanchas_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                ReservaAdmin r = (ReservaAdmin)e.Row.DataItem;
+
+                string estado = r.Estado ?? "Pendiente";
+
+                if (estado.Equals("Confirmada", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.Row.CssClass += " table-success";  
+                }
+                else
+                {
+                    e.Row.CssClass += " table-warning";  
+                }
+            }
+        }
+
 
     }
 }

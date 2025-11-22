@@ -128,21 +128,30 @@
 <div class="canchas-card mb-4">
     <h2 class="h5 fw-bold mb-3">Mis Reservas</h2>
 
-    <asp:Button ID="btnMisReservas" runat="server" 
-        Text="Ver mis reservas" 
+    <!-- CARTEL DE ESTADO (CONFIRMADA) -->
+    <asp:Label ID="lblEstadoReserva" runat="server" 
+        CssClass="alert alert-success fw-bold"
+        Visible="false">
+    </asp:Label>
+
+    <asp:Button ID="btnMisReservas" runat="server"
+        Text="Ver mis reservas"
         CssClass="btn btn-outline-primary w-100"
         OnClick="btnMisReservas_Click"
         CausesValidation="false"
         UseSubmitBehavior="false" />
 
-    <asp:Label ID="lblMisReservasMsg" runat="server" 
+    <asp:Label ID="lblMisReservasMsg" runat="server"
         CssClass="text-danger fw-semibold d-block mb-3"></asp:Label>
 
     <asp:GridView ID="gvMisReservas" runat="server"
-        AutoGenerateColumns="False" 
+        AutoGenerateColumns="False"
         CssClass="table table-striped text-center"
-        Visible="false">
+        Visible="false"
+        OnRowDataBound="gvMisReservas_RowDataBound">
+
         <Columns>
+
             <asp:BoundField DataField="FechaReserva" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
 
             <asp:TemplateField HeaderText="Inicio">
@@ -158,12 +167,19 @@
             </asp:TemplateField>
 
             <asp:BoundField DataField="Cancha.Nombre" HeaderText="Cancha" />
-            <asp:BoundField DataField="Estado.Nombre" HeaderText="Estado" />
+
+            <asp:TemplateField HeaderText="Estado">
+                <ItemTemplate>
+                    <%# ((Dominio.Reserva)Container.DataItem).Estado.Nombre %>
+                </ItemTemplate>
+            </asp:TemplateField>
+
             <asp:BoundField DataField="Sucursal.Nombre" HeaderText="Sucursal" />
+
         </Columns>
     </asp:GridView>
 
-    <asp:Label ID="lblCantidadReservas" runat="server" 
+    <asp:Label ID="lblCantidadReservas" runat="server"
         CssClass="fw-semibold mt-2 d-block text-end"></asp:Label>
 </div>
 

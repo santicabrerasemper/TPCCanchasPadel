@@ -104,9 +104,9 @@ namespace Negocio
             try
             {
                 string consulta = @"
-        INSERT INTO Reservas (UsuarioID, CanchaID, Fecha, HoraInicio, HoraFin, PromocionID)
-        VALUES (@UsuarioID, @CanchaID, @Fecha, @HoraInicio, @HoraFin, @PromocionID);
-        SELECT SCOPE_IDENTITY();";
+INSERT INTO Reservas (UsuarioID, CanchaID, Fecha, HoraInicio, HoraFin, PromocionID, EstadoPago)
+VALUES (@UsuarioID, @CanchaID, @Fecha, @HoraInicio, @HoraFin, @PromocionID, 'Pendiente');
+SELECT SCOPE_IDENTITY();";
 
                 datos.setearConsulta(consulta);
                 datos.setearParametro("@UsuarioID", usuarioId);

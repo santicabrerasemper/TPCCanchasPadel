@@ -15,5 +15,6 @@ namespace Dominio
         public DateTime Fecha { get; set; }
         public string HoraInicio { get; set; }
         public string HoraFin { get; set; }
+        public string Estado { get; set; }
     }
 }

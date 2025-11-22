@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ConexionBD;
 using Dominio;
-using ConexionBD;
+using System;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Negocio
 {
@@ -268,73 +269,53 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(@"
-                SELECT
-                    r.ReservaID,
-                    r.UsuarioID,
-                    r.CanchaID,
-                    r.Fecha,
-                    r.HoraInicio,
-                    r.HoraFin,
-                    c.Nombre AS CanchaNombre,
-                    e.Nombre AS EstadoNombre,
-                    s.Nombre AS SucursalNombre
-                FROM Reservas r
-                INNER JOIN Canchas c   ON r.CanchaID = c.CanchaID
-                INNER JOIN Estados e   ON c.EstadoID = e.EstadoID
-                INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-                WHERE r.UsuarioID = @UsuarioID
-                ORDER BY r.Fecha DESC, r.HoraInicio;");
+SELECT
+    r.ReservaID,
+    r.UsuarioID,
+    r.CanchaID,
+    r.Fecha,
+    r.HoraInicio,
+    r.HoraFin,
+    r.EstadoPago,                              -- 👈 AHORA TRAEMOS EL ESTADO REAL
+    c.Nombre AS CanchaNombre,
+    s.Nombre AS SucursalNombre
+FROM Reservas r
+INNER JOIN Canchas c   ON r.CanchaID = c.CanchaID
+INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+WHERE r.UsuarioID = @UsuarioID
+ORDER BY r.Fecha DESC, r.HoraInicio;");
 
                 datos.setearParametro("@UsuarioID", idUsuario);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    try
+                    Reserva reserva = new Reserva();
+                    reserva.Estado = new Estado();   
+
+                    reserva.IdReserva = Convert.ToInt32(datos.Lector["ReservaID"]);
+                    reserva.FechaReserva = Convert.ToDateTime(datos.Lector["Fecha"]);
+
+                    reserva.HoraInicio =
+                        datos.Lector["HoraInicio"] is TimeSpan t1 ? t1 : ((DateTime)datos.Lector["HoraInicio"]).TimeOfDay;
+
+                    reserva.HoraFin =
+                        datos.Lector["HoraFin"] is TimeSpan t2 ? t2 : ((DateTime)datos.Lector["HoraFin"]).TimeOfDay;
+
+                    reserva.Cancha = new Cancha
                     {
-                        Reserva reserva = new Reserva();
+                        Nombre = datos.Lector["CanchaNombre"].ToString()
+                    };
 
-                        reserva.IdReserva = datos.Lector["ReservaID"] != DBNull.Value
-                            ? Convert.ToInt32(datos.Lector["ReservaID"])
-                            : 0;
-
-                        reserva.FechaReserva = datos.Lector["Fecha"] != DBNull.Value
-                            ? Convert.ToDateTime(datos.Lector["Fecha"])
-                            : DateTime.MinValue;
-
-                        reserva.HoraInicio = datos.Lector["HoraInicio"] != DBNull.Value
-                            ? (datos.Lector["HoraInicio"] is TimeSpan t1 ? t1 : ((DateTime)datos.Lector["HoraInicio"]).TimeOfDay)
-                            : TimeSpan.Zero;
-
-                        reserva.HoraFin = datos.Lector["HoraFin"] != DBNull.Value
-                            ? (datos.Lector["HoraFin"] is TimeSpan t2 ? t2 : ((DateTime)datos.Lector["HoraFin"]).TimeOfDay)
-                            : TimeSpan.Zero;
-
-                        reserva.Cancha = new Cancha
-                        {
-                            Nombre = datos.Lector["CanchaNombre"]?.ToString() ?? ""
-                        };
-                        reserva.Estado = new Estado
-                        {
-                            Nombre = datos.Lector["EstadoNombre"]?.ToString() ?? ""
-                        };
-                        reserva.Sucursal = new Sucursal
-                        {
-                            Nombre = datos.Lector["SucursalNombre"]?.ToString() ?? ""
-                        };
-
-                        lista.Add(reserva);
-                    }
-                    catch (Exception exFila)
+                    reserva.Sucursal = new Sucursal
                     {
-                        throw new Exception("Error en fila: " +
-                            string.Join(" | ",
-                                "ReservaID=" + datos.Lector["ReservaID"],
-                                "Fecha=" + datos.Lector["Fecha"],
-                                "HoraInicio=" + datos.Lector["HoraInicio"],
-                                "HoraFin=" + datos.Lector["HoraFin"]
-                            ) + " -> " + exFila.Message);
-                    }
+                        Nombre = datos.Lector["SucursalNombre"].ToString()
+                    };
+
+                    
+                    reserva.Estado.Nombre = datos.Lector["EstadoPago"]?.ToString() ?? "Pendiente";
+
+                    lista.Add(reserva);
                 }
             }
             catch (Exception ex)
@@ -348,7 +329,6 @@ namespace Negocio
 
             return lista;
 
-
         }
 
         public List<ReservaAdmin> ListarReservas()
@@ -359,20 +339,20 @@ namespace Negocio
             try
             {
                 string consulta = @"
-                    SELECT 
-                        r.ReservaID,
-                        s.Nombre AS Sucursal,
-                        c.Nombre AS Cancha,
-                        u.Nombre + ' ' + u.Apellido AS Usuario,
-                        r.Fecha,
-                        r.HoraInicio,
-                        r.HoraFin
-                    FROM Reservas r
-                    INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
-                    INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
-                    INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
-                    ORDER BY r.Fecha DESC, r.HoraInicio;
-                ";
+        SELECT 
+            r.ReservaID,
+            s.Nombre AS Sucursal,
+            c.Nombre AS Cancha,
+            u.Nombre + ' ' + u.Apellido AS Usuario,
+            r.Fecha,
+            r.HoraInicio,
+            r.HoraFin,
+            r.EstadoPago
+        FROM Reservas r
+        INNER JOIN Canchas c ON r.CanchaID = c.CanchaID
+        INNER JOIN Sucursales s ON c.SucursalID = s.SucursalID
+        INNER JOIN Usuarios u ON r.UsuarioID = u.UsuarioID
+        ORDER BY r.Fecha DESC, r.HoraInicio;";
 
                 datos.setearConsulta(consulta);
                 datos.ejecutarLectura();
@@ -382,13 +362,15 @@ namespace Negocio
                     var reserva = new ReservaAdmin
                     {
                         ReservaID = (int)datos.Lector["ReservaID"],
-                        Sucursal = (string)datos.Lector["Sucursal"],
-                        Cancha = (string)datos.Lector["Cancha"],
-                        Usuario = (string)datos.Lector["Usuario"],
+                        Sucursal = datos.Lector["Sucursal"].ToString(),
+                        Cancha = datos.Lector["Cancha"].ToString(),
+                        Usuario = datos.Lector["Usuario"].ToString(),
                         Fecha = (DateTime)datos.Lector["Fecha"],
                         HoraInicio = datos.Lector["HoraInicio"].ToString(),
-                        HoraFin = datos.Lector["HoraFin"].ToString()
+                        HoraFin = datos.Lector["HoraFin"].ToString(),
+                        Estado = datos.Lector["EstadoPago"].ToString()   
                     };
+
                     lista.Add(reserva);
                 }
             }
@@ -552,6 +534,22 @@ namespace Negocio
             }
 
             return lista;
+        }
+
+        public void ConfirmarReserva(int reservaId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE Reservas SET EstadoPago = 'Confirmada' WHERE ReservaID = @id");
+                datos.setearParametro("@id", reservaId);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
 
 

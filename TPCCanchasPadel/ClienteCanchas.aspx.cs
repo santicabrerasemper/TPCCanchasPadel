@@ -185,6 +185,7 @@ namespace TPCCanchasPadel
                     DateTime fecha = DateTime.Parse(txtFecha.Text);
                     TimeSpan horaInicio = TimeSpan.Parse(txtHoraInicio.Text);
                     TimeSpan horaFin = TimeSpan.Parse(txtHoraFin.Text);
+
                     if (Session["Usuario"] == null)
                     {
                         Response.Redirect("Login.aspx");
@@ -196,7 +197,6 @@ namespace TPCCanchasPadel
 
                     ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
 
-                    
                     string error = negocio.ValidarReservaCompleta(canchaId, fecha, horaInicio, horaFin);
                     if (error != null)
                     {
@@ -204,14 +204,17 @@ namespace TPCCanchasPadel
                         return;
                     }
 
-                   
+                    
                     int nuevaId = negocio.ReservarCancha(usuarioId, canchaId, fecha, horaInicio, horaFin);
 
                     if (nuevaId > 0)
                     {
                         MostrarMensaje(
-                            $"✅ ¡Reserva confirmada!<br/>📅 Fecha: {fecha:dd/MM/yyyy}<br/>🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}<br/>💵 Total: ${CalcularPrecio(horaInicio, horaFin)}",
-                            "success");
+                            $"🟡 <b>Reserva registrada como PENDIENTE DE PAGO.</b><br/>" +
+                            $"📅 Fecha: {fecha:dd/MM/yyyy}<br/>" +
+                            $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}<br/>" +
+                            $"📌 Enviá el comprobante al alias: <b>canchaspadel.mp</b>",
+                            "warning");
 
                         gvCanchas.Visible = false;
                         btnNuevaBusqueda.Visible = true;
@@ -241,8 +244,6 @@ namespace TPCCanchasPadel
 
             try
             {
-                lblMisReservasMsg.Text = "Usuario ID: " + usuario.UsuarioID;
-
                 List<Reserva> reservas = negocio.ListarPorUsuario(usuario.UsuarioID);
 
                 if (reservas != null && reservas.Count > 0)
@@ -251,14 +252,37 @@ namespace TPCCanchasPadel
                     gvMisReservas.DataSource = reservas;
                     gvMisReservas.DataBind();
 
-                    lblMisReservasMsg.Text = "";
                     lblCantidadReservas.Text = $"Total de reservas: {reservas.Count}";
                 }
                 else
                 {
                     gvMisReservas.Visible = false;
                     lblMisReservasMsg.Text = "Todavía no hiciste ninguna reserva.";
+                    lblMisReservasMsg.CssClass = "text-danger fw-bold";
                     lblCantidadReservas.Text = "";
+                    return;
+                }
+
+                
+                var reservaConfirmada = reservas.Find(r =>
+                    r.Estado.Nombre.Equals("Confirmada", StringComparison.OrdinalIgnoreCase));
+
+                if (reservaConfirmada != null)
+                {
+                   
+                    lblMisReservasMsg.Text =
+                        $@"<div class='alert alert-success shadow-sm p-3 mb-3' role='alert' style='font-size:1.05rem;'>
+                    <strong>🎉 ¡Reserva confirmada!</strong><br/>
+                    Tu reserva de la cancha <b>{reservaConfirmada.Cancha.Nombre}</b> fue confirmada con éxito.<br/>
+                    ¡Gracias por elegirnos!
+                   </div>";
+
+                    lblMisReservasMsg.Visible = true;
+                }
+                else
+                {
+                    lblMisReservasMsg.Text = "";
+                    lblMisReservasMsg.Visible = false;
                 }
             }
             catch (Exception ex)
@@ -266,8 +290,8 @@ namespace TPCCanchasPadel
                 gvMisReservas.Visible = false;
                 lblMisReservasMsg.Text =
                     "⚠️ Error al listar tus reservas: " + ex.Message +
-                    (ex.InnerException != null ? " | " + ex.InnerException.Message : "") +
-                    "<br><br><strong>Detalle completo:</strong><br>" + ex.ToString();
+                    (ex.InnerException != null ? " | " + ex.InnerException.Message : "");
+                lblMisReservasMsg.CssClass = "alert alert-danger fw-bold";
             }
         }
 
@@ -328,6 +352,26 @@ namespace TPCCanchasPadel
         {
             Session["MensajeInfo"] = "Listo, podés realizar una nueva búsqueda.";
             Response.Redirect(Request.RawUrl);
+        }
+
+        protected void gvMisReservas_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Reserva r = (Reserva)e.Row.DataItem;
+
+                string estado = r.Estado?.Nombre ?? "Pendiente";
+
+                
+                if (estado.Equals("Confirmada", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.Row.CssClass += " table-success";  
+                }
+                else
+                {
+                    e.Row.CssClass += " table-warning";  
+                }
+            }
         }
 
     }
