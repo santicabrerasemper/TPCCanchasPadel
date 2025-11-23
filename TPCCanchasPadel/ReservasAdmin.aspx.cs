@@ -3,6 +3,7 @@ using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace TPCCanchasPadel
@@ -98,22 +99,33 @@ namespace TPCCanchasPadel
             }
         }
 
-        protected void btnEliminarReserva_Click(object sender, EventArgs e)
+        protected void btnRechazarReserva_Click(object sender, EventArgs e)
         {
+            bool seleccionoAlgo = false;
+
             foreach (GridViewRow row in gvCanchas.Rows)
             {
-                var chk = row.FindControl("chkSelect") as CheckBox;
-                var hdn = row.FindControl("hdnId") as HiddenField;
+                CheckBox chk = row.FindControl("chkSelect") as CheckBox;
+                HiddenField hdn = row.FindControl("hdnId") as HiddenField;
 
-                if (chk != null && chk.Checked && hdn != null)
+                if (chk.Checked)
                 {
-                    int id = int.Parse(hdn.Value);
-                    reservasNegocio.EliminarReserva(id);
+                    seleccionoAlgo = true;
+                    int reservaId = int.Parse(hdn.Value);
+                    reservasNegocio.RechazarReserva(reservaId);
                 }
             }
 
-            CargarReservas(); 
+            if (!seleccionoAlgo)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert",
+                    "alert('Debe seleccionar al menos una reserva.');", true);
+                return;
+            }
+
+            CargarReservas();
         }
+
 
         protected void btnEditar_Click(object sender, EventArgs e)
         {
@@ -147,6 +159,7 @@ namespace TPCCanchasPadel
 
         protected void btnConfirmarReserva_Click(object sender, EventArgs e)
         {
+            bool seleccionoAlgo = false;
             List<int> reservasConfirmadas = new List<int>();
 
             foreach (GridViewRow row in gvCanchas.Rows)
@@ -166,14 +179,15 @@ namespace TPCCanchasPadel
                 }
             }
 
-            
-            if (reservasConfirmadas.Count > 0)
+            if (!seleccionoAlgo)
             {
-                Session["UltimasReservasConfirmadas"] = reservasConfirmadas;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert",
+                    "alert('Debe seleccionar al menos una reserva.');", true);
+                return;
             }
 
-            
-            CargarReservas();
+             Session["UltimasReservasConfirmadas"] = reservasConfirmadas;
+             CargarReservas();
         }
 
         protected void gvCanchas_RowDataBound(object sender, GridViewRowEventArgs e)
