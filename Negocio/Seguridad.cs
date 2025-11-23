@@ -45,13 +45,25 @@ namespace Negocio
         {
             page.Session.Clear();
             page.Session.Abandon();
+            var cookie = page.Request.Cookies["ASP.NET_SessionId"];
+            if (cookie != null)
+            {
+                cookie.Expires = DateTime.UtcNow.AddDays(-1);
+                page.Response.Cookies.Add(cookie);
+            }
         }
+
 
         public static void NoCache(Page page)
         {
-            page.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            page.Response.Cache.SetNoStore();
-            page.Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            var cache = page.Response.Cache;
+            cache.SetCacheability(HttpCacheability.NoCache);
+            cache.SetNoStore();
+            cache.SetExpires(DateTime.UtcNow.AddYears(-1));
+            cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+            cache.SetValidUntilExpires(false);
+            cache.SetAllowResponseInBrowserHistory(false);
         }
+
     }
 }

@@ -15,6 +15,11 @@ namespace TPCCanchasPadel
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.NoCache(this);
+            Seguridad.RequerirSesion(this);
+            Seguridad.RequerirAdmin(this);
+
+
             if (!IsPostBack)
             {
                 CargarSucursales();

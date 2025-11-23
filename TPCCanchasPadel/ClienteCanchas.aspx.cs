@@ -14,8 +14,12 @@ namespace TPCCanchasPadel
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Seguridad.RequerirSesion(this);
             Seguridad.NoCache(this);
+            Seguridad.RequerirSesion(this);
+
+            if (!Seguridad.SesionActiva(Session))
+                return;
+
             if (!IsPostBack)
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-AR");
@@ -26,16 +30,15 @@ namespace TPCCanchasPadel
                 btnNuevaBusqueda.Visible = false;
                 CargarSucursales();
 
-                Usuario loged = (Usuario)Session["Usuario"];
+                var loged = Session["Usuario"] as Usuario;
 
-                if(loged.RolID == 01)
+                if (loged != null && loged.RolID == 1)
                 {
                     txtFecha.Attributes.Remove("required");
                     txtHoraInicio.Attributes.Remove("required");
                     txtHoraFin.Attributes.Remove("required");
                     ddlSucursal.Attributes.Remove("required");
                 }
-
 
                 if (Session["MensajeInfo"] != null)
                 {
@@ -44,20 +47,18 @@ namespace TPCCanchasPadel
                 }
             }
 
-            Usuario usuario = (Usuario)Session["Usuario"];
-            if (usuario.RolID == 01)
-            {
+            var usuario = Session["Usuario"] as Usuario;
+            if (usuario != null && usuario.RolID == 1)
                 btnVolver.Visible = true;
-            }
             else
-            {
                 btnVolver.Visible = false;
-            }
+
             lblPromo.Visible = false;
             lblPromo.Text = string.Empty;
             hidPromoId.Value = string.Empty;
             ViewState.Remove("PromoPct");
         }
+
 
 
         private void CargarSucursales()

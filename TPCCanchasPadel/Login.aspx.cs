@@ -10,6 +10,8 @@ namespace TPCCanchasPadel
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Seguridad.NoCache(this);
+            
             if (!IsPostBack)
             {
                 Seguridad.CerrarSesion(this);
@@ -38,17 +40,18 @@ namespace TPCCanchasPadel
             if (user == null)
             {
                 lblMensaje.CssClass = "text-danger d-block mt-3";
-                lblMensaje.Text = msg; 
+                lblMensaje.Text = msg;
                 return;
             }
 
-
             Session["UsuarioID"] = user.UsuarioID;
-            Session["Usuario"] = user.NombreUsuario;
-            Session["Usuario"] = user;
+            Session["Usuario"] = user; 
             Session["RolID"] = user.RolID;
 
-            var destino = user.RolID == Seguridad.RolAdmin ? "~/ReservasAdmin.aspx" : "~/ClienteCanchas.aspx";
+            var destino = user.RolID == Seguridad.RolAdmin
+                            ? "~/ReservasAdmin.aspx"
+                            : "~/ClienteCanchas.aspx";
+
             Response.Redirect(ResolveUrl(destino), false);
             Context.ApplicationInstance.CompleteRequest();
         }
