@@ -182,14 +182,34 @@ namespace Negocio
             }
         }
 
-        public void EliminarReserva(int idReserva)
+        public void RechazarReserva(int reservaId)
         {
-            var datos = new AccesoDatos();
+            AccesoDatos datos = new AccesoDatos();
+
             try
             {
-                string sql = "DELETE FROM Reservas WHERE ReservaID = @id;";
-                datos.setearConsulta(sql);
-                datos.setearParametro("@id", idReserva);
+                datos.setearConsulta("UPDATE Reservas SET EstadoPago = 'Cancelada' WHERE ReservaID = @id");
+                datos.setearParametro("@id", reservaId);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void ConfirmarReserva(int reservaId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE Reservas SET EstadoPago = 'Confirmada' WHERE ReservaID = @id");
+                datos.setearParametro("@id", reservaId);
                 datos.ejecutarAccion();
             }
             finally
@@ -197,6 +217,7 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
         public List<Cancha> ListarCanchasDisponibles(DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
         {
             List<Cancha> canchas = new List<Cancha>();
@@ -536,21 +557,7 @@ ORDER BY r.Fecha DESC, r.HoraInicio;");
             return lista;
         }
 
-        public void ConfirmarReserva(int reservaId)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta("UPDATE Reservas SET EstadoPago = 'Confirmada' WHERE ReservaID = @id");
-                datos.setearParametro("@id", reservaId);
-                datos.ejecutarAccion();
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
+        
 
 
     }

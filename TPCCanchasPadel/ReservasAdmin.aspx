@@ -28,14 +28,12 @@
         </div>
 
         <asp:GridView ID="gvCanchas" runat="server" 
-    CssClass="table table-bordered table-hover text-center"
+            CssClass="table table-bordered table-hover text-center"
     AutoGenerateColumns="False"
     OnRowDataBound="gvCanchas_RowDataBound">
 
 
     <Columns>
-
-        <asp:BoundField DataField="ReservaID" HeaderText="ID" />
 
         <asp:TemplateField HeaderText="">
             <ItemTemplate>
@@ -60,14 +58,12 @@
             
             <asp:Button ID="btnAgregarReserva" runat="server" Text="Agregar Reserva" CssClass="btn btn-info me-2" OnClick="btnAgregarReserva_Click" />
             
-            <asp:Button ID="btnCambiarEstado" runat="server" Text="Eliminar Reserva" CssClass="btn btn-danger me-2" OnClick="btnEliminarReserva_Click" />
-            <asp:Button ID="btnConfirmarReserva" 
-    runat="server" 
-    Text="Confirmar Reserva" 
-    CssClass="btn btn-success me-2" 
-    OnClick="btnConfirmarReserva_Click" />
-            <!--<asp:Button ID="btnEditarReserva" runat="server" Text="Editar Reserva" CssClass="btn btn-info me-2" OnClick="btnEditar_Click" />-->
-            <asp:Button ID="btnEditarSucursales" runat="server" Text="Editar Sucursales" CssClass="btn btn-success me-2" OnClick="btnEditarSucursales_Click" />
+            <asp:Button ID="btnCambiarEstado" runat="server" Text="Rechazar Reserva" CssClass="btn btn-danger me-2" OnClick="btnRechazarReserva_Click" />
+
+            <asp:Button ID="btnConfirmarReserva" runat="server" Text="Confirmar Reserva" CssClass="btn btn-success me-2" OnClick="btnConfirmarReserva_Click" />
+
+            <asp:Button ID="btnEditarSucursales" runat="server" Text="Editar Sucursales" CssClass="btn btn-warning me-2" OnClick="btnEditarSucursales_Click" />
+
         </div>
         
         

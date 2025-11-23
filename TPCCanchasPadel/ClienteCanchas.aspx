@@ -88,11 +88,11 @@
                     </div>
 
                     <div class="col-12 col-md-3">
-                        <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-info w-100" OnClick="btnVolver_Click" CausesValidation="false" />
+                        <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-secondary w-100" OnClick="btnVolver_Click" CausesValidation="false" />
                     </div>
 
                     <div class="col-md-3 d-flex align-items-end">
-                        <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda" CssClass="btn btn-secondary w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
+                        <asp:Button ID="btnNuevaBusqueda" runat="server" Text="Nueva búsqueda" CssClass="btn btn-info w-100" Visible="false" OnClick="btnNuevaBusqueda_Click" />
                     </div>
 
 
@@ -143,7 +143,6 @@
             <div class="canchas-card mb-4">
                 <h2 class="h5 fw-bold mb-3">Mis Reservas</h2>
 
-                <!-- CARTEL DE ESTADO (CONFIRMADA) -->
                 <asp:Label ID="lblEstadoReserva" runat="server"
                     CssClass="alert alert-success fw-bold"
                     Visible="false">

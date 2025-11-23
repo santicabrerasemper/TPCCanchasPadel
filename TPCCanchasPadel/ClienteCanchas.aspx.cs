@@ -236,7 +236,9 @@ namespace TPCCanchasPadel
                             $"🟡 <b>Reserva registrada como PENDIENTE DE PAGO.</b><br/>" +
                             $"📅 Fecha: {fecha:dd/MM/yyyy}<br/>" +
                             $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}<br/>" +
-                            $"📌 Enviá el comprobante al alias: <b>canchaspadel.mp</b>",
+                            $"✅ Realiza el pago a nuestro Alias: <b>canchaspadel.mp</b>" +
+                            $"📌 Enviá el comprobante al telefono: 1163097274" +
+                            $"❌ Para cancelar tu reserva debes avisarnos por chat 24hs previas al turno",
                             "warning");
 
                         gvCanchas.Visible = false;
@@ -389,6 +391,10 @@ namespace TPCCanchasPadel
                 if (estado.Equals("Confirmada", StringComparison.OrdinalIgnoreCase))
                 {
                     e.Row.CssClass += " table-success";  
+                }
+                else if (estado.Equals("Cancelada", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.Row.CssClass += " table-danger";
                 }
                 else
                 {
