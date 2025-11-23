@@ -32,7 +32,6 @@ namespace TPCCanchasPadel
 
             try
             {
-                // 1️⃣ Insertar nueva Localidad (IDENTITY genera el ID)
                 datos = new AccesoDatos();
                 datos.setearConsulta("INSERT INTO Localidades (Nombre) OUTPUT INSERTED.LocalidadID VALUES (@nombre)");
                 datos.setearParametro("@nombre", txtLocalidad.Text);
@@ -42,8 +41,6 @@ namespace TPCCanchasPadel
                 int nuevoLocalidadId = Convert.ToInt32(datos.Lector[0]);
                 datos.cerrarConexion();
 
-
-                // 2️⃣ Insertar nueva Sucursal (IDENTITY genera el ID)
                 datos = new AccesoDatos();
                 datos.setearConsulta(@"
                     INSERT INTO Sucursales (LocalidadID, Nombre, FotoUrl)
@@ -66,11 +63,6 @@ namespace TPCCanchasPadel
             {
                 MostrarMensaje("❌ Error: " + ex.Message, "danger");
             }
-        }
-
-        protected void btnCancelar_Click(object Sender, EventArgs e)
-        {
-            Response.Redirect("ReservasAdmin.aspx");
         }
 
         private void MostrarMensaje(string texto, string tipo)
@@ -118,7 +110,7 @@ namespace TPCCanchasPadel
 
         protected void btnVolver_Click(object sender, EventArgs e)
         {
-            Response.Redirect("ReservasAdmin.aspx");
+            Response.Redirect("Editar.aspx");
         }
 
     }

@@ -202,6 +202,10 @@ namespace TPCCanchasPadel
                 {
                     e.Row.CssClass += " table-success";  
                 }
+                else if (estado.Equals("Cancelada", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.Row.CssClass += " table-danger";
+                }
                 else
                 {
                     e.Row.CssClass += " table-warning";  

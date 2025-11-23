@@ -28,7 +28,7 @@
         </div>
 
         <asp:GridView ID="gvCanchas" runat="server" 
-    CssClass="table table-bordered table-hover text-center"
+            CssClass="table table-bordered table-hover text-center"
     AutoGenerateColumns="False"
     OnRowDataBound="gvCanchas_RowDataBound">
 
