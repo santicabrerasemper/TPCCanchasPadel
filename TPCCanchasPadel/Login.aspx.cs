@@ -49,8 +49,8 @@ namespace TPCCanchasPadel
             Session["RolID"] = user.RolID;
 
             var destino = user.RolID == Seguridad.RolAdmin
-                            ? "~/ReservasAdmin.aspx"
-                            : "~/ClienteCanchas.aspx";
+                ? "~/ReservasAdmin.aspx"
+                : "~/ClienteCanchas.aspx";
 
             Response.Redirect(ResolveUrl(destino), false);
             Context.ApplicationInstance.CompleteRequest();

@@ -191,8 +191,8 @@ namespace TPCCanchasPadel
                 return;
             }
 
-             Session["UltimasReservasConfirmadas"] = reservasConfirmadas;
-             CargarReservas();
+            Session["UltimasReservasConfirmadas"] = reservasConfirmadas;
+            CargarReservas();
         }
 
         protected void gvCanchas_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -217,8 +217,6 @@ namespace TPCCanchasPadel
                 }
             }
         }
-
-
     }
 }
 

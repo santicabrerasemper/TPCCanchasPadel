@@ -22,37 +22,27 @@
                     <label for="ddlFecha" class="form-label fw-bold">Seleccionar Fecha</label>
                     <asp:DropDownList ID="ddlFecha" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlFecha_SelectedIndexChanged"></asp:DropDownList>
                 </div>
-                
             </div>
-    
         </div>
 
-        <asp:GridView ID="gvCanchas" runat="server" 
-            CssClass="table table-bordered table-hover text-center"
-    AutoGenerateColumns="False"
-    OnRowDataBound="gvCanchas_RowDataBound">
-
-
-    <Columns>
-
-        <asp:TemplateField HeaderText="">
-            <ItemTemplate>
-                <asp:CheckBox ID="chkSelect" runat="server" />
-                <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("ReservaID") %>' />
-            </ItemTemplate>
-        </asp:TemplateField>
-
-        <asp:BoundField DataField="Sucursal" HeaderText="Sucursal" />
-        <asp:BoundField DataField="Cancha" HeaderText="Cancha" />
-        <asp:BoundField DataField="Usuario" HeaderText="Usuario" />
-        <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
-        <asp:BoundField DataField="HoraInicio" HeaderText="Hora Inicio" />
-        <asp:BoundField DataField="HoraFin" HeaderText="Hora Fin" />
-        <asp:BoundField DataField="Estado" HeaderText="Estado" />
-
-    </Columns>
-</asp:GridView>
-       
+        <asp:GridView ID="gvCanchas" runat="server" CssClass="table table-bordered table-hover text-center" AutoGenerateColumns="False" OnRowDataBound="gvCanchas_RowDataBound">
+            <Columns>
+                <asp:TemplateField HeaderText="">
+                    <ItemTemplate>
+                        <asp:CheckBox ID="chkSelect" runat="server" />
+                        <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("ReservaID") %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>
+        
+                <asp:BoundField DataField="Sucursal" HeaderText="Sucursal" />
+                <asp:BoundField DataField="Cancha" HeaderText="Cancha" />
+                <asp:BoundField DataField="Usuario" HeaderText="Usuario" />
+                <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
+                <asp:BoundField DataField="HoraInicio" HeaderText="Hora Inicio" />
+                <asp:BoundField DataField="HoraFin" HeaderText="Hora Fin" />
+                <asp:BoundField DataField="Estado" HeaderText="Estado" />  
+            </Columns>
+        </asp:GridView>   
     
         <div class="text-center mt-4">
             
@@ -66,9 +56,6 @@
 
         </div>
         
-        
         <asp:HiddenField ID="hiddenSucursalNombre" runat="server" />
-    
-    </div>
-    
+    </div> 
 </asp:Content>
