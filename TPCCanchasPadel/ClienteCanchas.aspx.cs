@@ -60,6 +60,48 @@ namespace TPCCanchasPadel
         }
 
 
+        private void MostrarInfoSucursal(Sucursal suc)
+        {
+            if (suc == null)
+            {
+                lblDescCancha.Text = string.Empty;
+                lblUbicacion.Text = string.Empty;
+                lblDescCancha.Visible = false;
+                lblUbicacion.Visible = false;
+                return;
+            }
+
+            string desc;
+            string ubicacion;
+
+            switch (suc.SucursalID)
+            {
+                case 1:
+                    desc = "Complejo con canchas de césped sintético profesional, todas techadas.";
+                    ubicacion = "Ubicación: Av. Padel Club 1234, Barrio Centro, Buenos Aires.";
+                    break;
+
+                case 2:
+                    desc = "Canchas al aire libre, iluminación LED y estacionamiento propio.";
+                    ubicacion = "Ubicación: Calle Padel Sur 456, Barrio Sur, La Plata.";
+                    break;
+
+                default:
+                    desc = $"Canchas disponibles en {suc.Nombre}. Consultanos por más detalles.";
+                    ubicacion = string.Empty;
+                    break;
+            }
+
+            lblDescCancha.Text = desc;
+            lblUbicacion.Text = ubicacion;
+
+            lblDescCancha.Visible = !string.IsNullOrEmpty(desc);
+            lblUbicacion.Visible = !string.IsNullOrEmpty(ubicacion);
+        }
+
+
+
+
 
         private void CargarSucursales()
         {
@@ -117,6 +159,7 @@ namespace TPCCanchasPadel
             }
 
             imgSucursal.Visible = true;
+            MostrarInfoSucursal(suc);
 
             var fechaSeleccionada = DateTime.Today;
             if (DateTime.TryParse(txtFecha.Text, out var f)) fechaSeleccionada = f;

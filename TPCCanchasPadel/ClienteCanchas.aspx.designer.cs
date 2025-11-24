@@ -33,6 +33,24 @@ namespace TPCCanchasPadel
         protected global::System.Web.UI.WebControls.Image imgSucursal;
 
         /// <summary>
+        /// Control lblDescCancha.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDescCancha;
+
+        /// <summary>
+        /// Control lblUbicacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUbicacion;
+
+        /// <summary>
         /// Control txtFecha.
         /// </summary>
         /// <remarks>

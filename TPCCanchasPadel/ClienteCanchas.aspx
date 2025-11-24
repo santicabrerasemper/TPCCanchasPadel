@@ -21,6 +21,11 @@
                     color: #ffd000;
                 }
 
+        .img-sucursal-rounded {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
         .canchas-wrap {
             max-width: 980px;
         }
@@ -62,11 +67,28 @@
 
 
                     <div class="col-12 mt-3">
-                        <asp:Image ID="imgSucursal" runat="server"
-                            Visible="false"
-                            Width="350px"
-                            CssClass="img-fluid rounded shadow-sm border" />
+                        <div class="row g-3 align-items-center">
+
+                            <div class="col-md-5">
+                                <asp:Image ID="imgSucursal" runat="server"
+                                    Visible="false"
+                                    Width="350px"
+                                    CssClass="img-fluid img-sucursal-rounded shadow-sm border" />
+                            </div>
+
+                            <div class="col-md-7 d-flex flex-column justify-content-center">
+                                <asp:Label ID="lblDescCancha" runat="server"
+                                    CssClass="d-block text-muted mb-1">
+                                </asp:Label>
+
+                                <asp:Label ID="lblUbicacion" runat="server"
+                                    CssClass="d-block fw-semibold">
+                                </asp:Label>
+                            </div>
+                        </div>
                     </div>
+
+
 
                     <div class="col-md-3">
                         <label for="txtFecha" class="form-label">Fecha</label>
@@ -99,11 +121,11 @@
                     <div class="col-12 col-md-3 d-none">
                     </div>
                 </div>
-           
-<asp:Label ID="lblPromo" runat="server"
-  CssClass="alert alert-info py-2 px-3 d-inline-block mb-2"
-  Visible="false" />
-<asp:HiddenField ID="hidPromoId" runat="server" />
+
+                <asp:Label ID="lblPromo" runat="server"
+                    CssClass="alert alert-info py-2 px-3 d-inline-block mb-2"
+                    Visible="false" />
+                <asp:HiddenField ID="hidPromoId" runat="server" />
 
                 <asp:Label ID="lblMensaje" runat="server" CssClass="fw-semibold d-block mt-3"></asp:Label>
             </div>
