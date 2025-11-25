@@ -99,10 +99,6 @@ namespace TPCCanchasPadel
             lblUbicacion.Visible = !string.IsNullOrEmpty(ubicacion);
         }
 
-
-
-
-
         private void CargarSucursales()
         {
             AccesoDatos datos = new AccesoDatos();
@@ -206,7 +202,6 @@ namespace TPCCanchasPadel
 
                 ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
 
-                
                 string errorValidacion = negocio.ValidarBusquedaGeneral(fecha, horaInicio, horaFin);
                 if (errorValidacion != null)
                 {
@@ -215,7 +210,6 @@ namespace TPCCanchasPadel
                     return;
                 }
 
-                
                 List<Cancha> disponibles = negocio.ListarCanchasDisponibles(fecha, horaInicio, horaFin, sucursalId);
 
                 if (disponibles.Count == 0)
@@ -226,6 +220,22 @@ namespace TPCCanchasPadel
                 else
                 {
                     disponibles = disponibles.Where(c => c.Activa).ToList();
+
+                    int promoPct = 0;
+                    if (ViewState["PromoPct"] != null)
+                        int.TryParse(ViewState["PromoPct"].ToString(), out promoPct);
+
+                    if (promoPct > 0)
+                    {
+                        foreach (var c in disponibles)
+                        {
+                            c.TotalEstimado = Math.Round(
+                                c.TotalEstimado * (100 - promoPct) / 100m,
+                                2
+                            );
+                        }
+                    }
+
                     gvCanchas.DataSource = disponibles;
                     gvCanchas.DataBind();
                     gvCanchas.Visible = true;
@@ -239,6 +249,7 @@ namespace TPCCanchasPadel
                 gvCanchas.Visible = false;
             }
         }
+
 
         protected void grillaCanchas_ComandoReserva(object sender, GridViewCommandEventArgs e)
         {
@@ -270,18 +281,40 @@ namespace TPCCanchasPadel
                         return;
                     }
 
-                    
-                    int nuevaId = negocio.ReservarCancha(usuarioId, canchaId, fecha, horaInicio, horaFin);
+                    int? promoId = null;
+                    if (int.TryParse(hidPromoId.Value, out int parsedPromo) && parsedPromo > 0)
+                    {
+                        promoId = parsedPromo;
+                    }
+
+                    int promoPct = 0;
+                    if (ViewState["PromoPct"] != null)
+                        int.TryParse(ViewState["PromoPct"].ToString(), out promoPct);
+            
+                    int nuevaId = negocio.ReservarCancha(
+                        usuarioId,
+                        canchaId,
+                        fecha,
+                        horaInicio,
+                        horaFin,
+                        promoId
+                    );
 
                     if (nuevaId > 0)
                     {
+                        string extraPromo = "";
+                        if (promoId.HasValue && promoPct > 0)
+                        {
+                            extraPromo = $"<br/>🎉 Se aplicará la promoción vigente de <b>{promoPct}% OFF</b> sobre el total.";
+                        }
+
                         MostrarMensaje(
                             $"🟡 <b>Reserva registrada como PENDIENTE DE PAGO.</b><br/>" +
                             $"📅 Fecha: {fecha:dd/MM/yyyy}<br/>" +
-                            $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}<br/>" +
-                            $"✅ Realiza el pago a nuestro Alias: <b>canchaspadel.mp</b>" +
-                            $"📌 Enviá el comprobante al telefono: 1163097274" +
-                            $"❌ Para cancelar tu reserva debes avisarnos por chat 24hs previas al turno",
+                            $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}{extraPromo}<br/>" +
+                            $"✅ Realizá el pago a nuestro Alias: <b>canchaspadel.mp</b><br/>" +
+                            $"📌 Enviá el comprobante al teléfono: 1163097274<br/>" +
+                            $"❌ Para cancelar tu reserva debés avisarnos por chat 24 hs previas al turno.",
                             "warning");
 
                         gvCanchas.Visible = false;
@@ -298,6 +331,7 @@ namespace TPCCanchasPadel
                 }
             }
         }
+
 
         protected void btnMisReservas_Click(object sender, EventArgs e)
         {

@@ -97,7 +97,14 @@ namespace Negocio
 
 
 
-        public int ReservarCancha(int usuarioId, int canchaId, DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
+        public int ReservarCancha(
+     int usuarioId,
+     int canchaId,
+     DateTime fecha,
+     TimeSpan horaInicio,
+     TimeSpan horaFin,
+     int? promocionId = null   
+ )
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -114,7 +121,11 @@ SELECT SCOPE_IDENTITY();";
                 datos.setearParametro("@Fecha", fecha);
                 datos.setearParametro("@HoraInicio", horaInicio);
                 datos.setearParametro("@HoraFin", horaFin);
-                datos.setearParametro("@PromocionID", DBNull.Value);
+
+                if (promocionId.HasValue)
+                    datos.setearParametro("@PromocionID", promocionId.Value);
+                else
+                    datos.setearParametro("@PromocionID", DBNull.Value);
 
                 object result = datos.ejecutarScalar();
                 return result != null ? Convert.ToInt32(result) : 0;
@@ -128,6 +139,7 @@ SELECT SCOPE_IDENTITY();";
                 datos.cerrarConexion();
             }
         }
+
 
 
         public string ValidarReservaCompleta(int canchaId, DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin)
