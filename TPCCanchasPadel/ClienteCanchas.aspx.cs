@@ -59,7 +59,6 @@ namespace TPCCanchasPadel
             ViewState.Remove("PromoPct");
         }
 
-
         private void MostrarInfoSucursal(Sucursal suc)
         {
             if (suc == null)
@@ -98,7 +97,10 @@ namespace TPCCanchasPadel
             lblDescCancha.Visible = !string.IsNullOrEmpty(desc);
             lblUbicacion.Visible = !string.IsNullOrEmpty(ubicacion);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39a4409adbe8bf5f2ddfb944de9e63f85499a872
         private void CargarSucursales()
         {
             AccesoDatos datos = new AccesoDatos();
@@ -124,8 +126,6 @@ namespace TPCCanchasPadel
                 datos.cerrarConexion();
             }
         }
-
-
         protected void ddlSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
             
@@ -139,10 +139,8 @@ namespace TPCCanchasPadel
 
             
             SucursalNegocio negocio = new SucursalNegocio();
-            Sucursal suc = negocio.ListarSucursales()
-                                  .Find(x => x.SucursalID == id);
+            Sucursal suc = negocio.ListarSucursales() .Find(x => x.SucursalID == id);
 
-            
             string imagenDefault = "https://via.placeholder.com/350x200.png?text=Sin+Imagen";
 
             if (suc != null && !string.IsNullOrEmpty(suc.FotoUrl))
@@ -173,12 +171,10 @@ namespace TPCCanchasPadel
                 ViewState.Remove("PromoPct");
             }
         }
-
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("ReservasAdmin.aspx");
         }
-
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -201,7 +197,11 @@ namespace TPCCanchasPadel
                 CargarPromoVigente(sucursalId, fecha);
 
                 ClienteCanchaNegocio negocio = new ClienteCanchaNegocio();
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 39a4409adbe8bf5f2ddfb944de9e63f85499a872
                 string errorValidacion = negocio.ValidarBusquedaGeneral(fecha, horaInicio, horaFin);
                 if (errorValidacion != null)
                 {
@@ -209,7 +209,11 @@ namespace TPCCanchasPadel
                     gvCanchas.Visible = false;
                     return;
                 }
+<<<<<<< HEAD
 
+=======
+               
+>>>>>>> 39a4409adbe8bf5f2ddfb944de9e63f85499a872
                 List<Cancha> disponibles = negocio.ListarCanchasDisponibles(fecha, horaInicio, horaFin, sucursalId);
 
                 if (disponibles.Count == 0)
@@ -311,10 +315,17 @@ namespace TPCCanchasPadel
                         MostrarMensaje(
                             $"🟡 <b>Reserva registrada como PENDIENTE DE PAGO.</b><br/>" +
                             $"📅 Fecha: {fecha:dd/MM/yyyy}<br/>" +
+<<<<<<< HEAD
                             $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}{extraPromo}<br/>" +
                             $"✅ Realizá el pago a nuestro Alias: <b>canchaspadel.mp</b><br/>" +
                             $"📌 Enviá el comprobante al teléfono: 1163097274<br/>" +
                             $"❌ Para cancelar tu reserva debés avisarnos por chat 24 hs previas al turno.",
+=======
+                            $"🕒 Horario: {horaInicio:hh\\:mm} - {horaFin:hh\\:mm}<br/>" +
+                            $"✅ Realiza el pago a nuestro Alias: <b>canchaspadel.mp</b><br/>" +
+                            $"📌 Enviá el comprobante al telefono: 1163097274<br/>" +
+                            $"❌ Para cancelar tu reserva debes avisarnos por chat 24hs previas al turno",
+>>>>>>> 39a4409adbe8bf5f2ddfb944de9e63f85499a872
                             "warning");
 
                         gvCanchas.Visible = false;
@@ -331,8 +342,11 @@ namespace TPCCanchasPadel
                 }
             }
         }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 39a4409adbe8bf5f2ddfb944de9e63f85499a872
         protected void btnMisReservas_Click(object sender, EventArgs e)
         {
             if (Session["Usuario"] == null)
@@ -373,11 +387,11 @@ namespace TPCCanchasPadel
                 {
                    
                     lblMisReservasMsg.Text =
-                        $@"<div class='alert alert-success shadow-sm p-3 mb-3' role='alert' style='font-size:1.05rem;'>
+                    $@"<div class='alert alert-success shadow-sm p-3 mb-3' role='alert' style='font-size:1.05rem;'>
                     <strong>🎉 ¡Reserva confirmada!</strong><br/>
                     Tu reserva de la cancha <b>{reservaConfirmada.Cancha.Nombre}</b> fue confirmada con éxito.<br/>
                     ¡Gracias por elegirnos!
-                   </div>";
+                    </div>";
 
                     lblMisReservasMsg.Visible = true;
                 }
@@ -396,9 +410,6 @@ namespace TPCCanchasPadel
                 lblMisReservasMsg.CssClass = "alert alert-danger fw-bold";
             }
         }
-
-
-
         private decimal CalcularPrecio(TimeSpan horaInicio, TimeSpan horaFin)
         {
             decimal precioHora = 6000m;
@@ -435,7 +446,7 @@ namespace TPCCanchasPadel
 
             lblMensaje.Text = $@"
             <div class='alert {color} p-4 rounded-3 shadow-sm mx-auto text-center' 
-                 style='max-width:500px; animation: fadeIn 0.6s ease-in-out;'>
+                style='max-width:500px; animation: fadeIn 0.6s ease-in-out;'>
                 <h5 class='fw-bold mb-2'>{icono} {titulo}</h5>
                 <p class='mb-0'>{texto}</p>
             </div>
@@ -447,15 +458,11 @@ namespace TPCCanchasPadel
                 }}
             </style>";
         }
-
-       
-
         protected void btnNuevaBusqueda_Click(object sender, EventArgs e)
         {
             Session["MensajeInfo"] = "Listo, podés realizar una nueva búsqueda.";
             Response.Redirect(Request.RawUrl);
         }
-
         protected void gvMisReservas_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -463,7 +470,6 @@ namespace TPCCanchasPadel
                 Reserva r = (Reserva)e.Row.DataItem;
 
                 string estado = r.Estado?.Nombre ?? "Pendiente";
-
                 
                 if (estado.Equals("Confirmada", StringComparison.OrdinalIgnoreCase))
                 {
@@ -479,10 +485,8 @@ namespace TPCCanchasPadel
                 }
             }
         }
-
         private void CargarPromoVigente(int sucursalId, DateTime fecha)
         {
- 
             lblPromo.Visible = false;
             lblPromo.Text = string.Empty;
             hidPromoId.Value = string.Empty;
@@ -496,8 +500,8 @@ namespace TPCCanchasPadel
             SELECT TOP 1 PromocionID, Descripcion, Descuento
             FROM Promociones
             WHERE SucursalID = {sucursalId}
-              AND EstadoID = 1
-              AND '{f}' BETWEEN FechaInicio AND FechaFin
+            AND EstadoID = 1
+            AND '{f}' BETWEEN FechaInicio AND FechaFin
             ORDER BY PromocionID DESC");
 
                 datos.ejecutarLectura();

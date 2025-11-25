@@ -94,8 +94,7 @@ namespace TPCCanchasPadel
             }
 
             lblMensaje.Text = $@"
-            <div class='alert {color} p-4 rounded-3 shadow-sm mx-auto text-center' 
-                 style='max-width:500px; animation: fadeIn 0.6s ease-in-out;'>
+            <div class='alert {color} p-4 rounded-3 shadow-sm mx-auto text-center' style='max-width:500px; animation: fadeIn 0.6s ease-in-out;'>
                 <h5 class='fw-bold mb-2'>{icono} {titulo}</h5>
                 <p class='mb-0'>{texto}</p>
             </div>

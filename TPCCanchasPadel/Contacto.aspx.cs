@@ -6,7 +6,6 @@ namespace TPCCanchasPadel
     public partial class Contacto : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e) { }
-
         protected void btnEnviar_Click(object sender, EventArgs e)
         {
             var nombre = (txtNombre.Text ?? "").Trim();
