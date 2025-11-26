@@ -174,6 +174,8 @@ namespace TPCCanchasPadel
 
                 if (chk != null && chk.Checked && hdn != null)
                 {
+                    seleccionoAlgo = true;
+                    
                     int reservaId = int.Parse(hdn.Value);
 
                     
