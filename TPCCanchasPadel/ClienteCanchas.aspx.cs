@@ -97,7 +97,10 @@ namespace TPCCanchasPadel
             lblDescCancha.Visible = !string.IsNullOrEmpty(desc);
             lblUbicacion.Visible = !string.IsNullOrEmpty(ubicacion);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1539565188855ed7c38a0f0b33a9ccffa392a9c1
         private void CargarSucursales()
         {
             AccesoDatos datos = new AccesoDatos();
@@ -324,8 +327,11 @@ namespace TPCCanchasPadel
                 }
             }
         }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1539565188855ed7c38a0f0b33a9ccffa392a9c1
         protected void btnMisReservas_Click(object sender, EventArgs e)
         {
             if (Session["Usuario"] == null)
